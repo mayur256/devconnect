@@ -6,9 +6,10 @@ const jwt = require('jsonwebtoken')
 const keys = require('../../config/keys')
 const passport = require('passport')
 
-
+//Loading User Model
 const User = require('../../models/User')
 
+const { default: validator } = require('validator')
 //Test route
 router.get('/test', (req, res) => res.json({msg:"This is a test users route"}))
 
@@ -19,10 +20,20 @@ router.get('/test', (req, res) => res.json({msg:"This is a test users route"}))
  */
 router.post("/register", (req, res) => {
     try{
+        //Loading Register validation module
+        const validateRegisterInput = require('../../validation/register')
+
+        let {errors, isValid} = validateRegisterInput(req.body)
+
+        if(!isValid){
+            return res.status(400).json(errors)
+        }
+
         User.findOne({email: req.body.email})
             .then(user => {
                 if(user){
-                    return res.status(400).json({email: "Email already exists!"})
+                    errors.email = "Email already exists!";
+                    return res.status(400).json(errors)
                 }
                 else{
                     const avatar = gravatar.url(req.body.email, {
@@ -65,12 +76,17 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
     const email = req.body.email
     const password = req.body.password
-    //console.log(email, password)
-    if(email && password){
+    
+    //Loading Login validation module
+    const validateLoginInput = require('../../validation/login')
+
+    let {errors, isValid} = validateLoginInput(req.body);
+    if(isValid){
         User.findOne({email})
             .then((user) => {
                 if(!user){
-                    return res.status(404).json({'error': 'User not found'})
+                    errors.email = "User with given email not found";
+                    return res.status(404).json(errors)
                 }
 
                 bcrypt.compare(password, user.password)
@@ -98,7 +114,7 @@ router.post("/login", (req, res) => {
             })
     }
     else{
-        return res.status(400).json({'error': "Either Email or Password missing!"})
+        return res.status(400).json(errors)
     }
 })
 
