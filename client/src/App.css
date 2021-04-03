@@ -1,0 +1,14 @@
+.bg-custom {
+    background-color:#798b97;
+}
+.landing{
+    min-height: 83vh;;
+    background-image: url("./images/banner.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.footer{
+    position: absolute;
+    width:100%;
+    bottom: 0;
+}

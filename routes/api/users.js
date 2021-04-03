@@ -24,9 +24,8 @@ router.post("/register", (req, res) => {
         const validateRegisterInput = require('../../validation/register')
 
         let {errors, isValid} = validateRegisterInput(req.body)
-
         if(!isValid){
-            return res.status(400).json(errors)
+            return res.status(400).json({hasError: !isValid,errors})
         }
 
         User.findOne({email: req.body.email})
@@ -81,6 +80,10 @@ router.post("/login", (req, res) => {
     const validateLoginInput = require('../../validation/login')
 
     let {errors, isValid} = validateLoginInput(req.body);
+    if(!isValid){
+        return res.status(400).json({hasError: !isValid,errors})
+    }
+    
     if(isValid){
         User.findOne({email})
             .then((user) => {
