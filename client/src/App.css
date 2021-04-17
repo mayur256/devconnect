@@ -1,5 +1,5 @@
 .bg-custom {
-    background-color:#798b97;
+    background-color:#77A6F7;
 }
 .landing{
     min-height: 83vh;;
@@ -11,4 +11,9 @@
     position: absolute;
     width:100%;
     bottom: 0;
+}
+.btn-submit{
+    background-color: #77A6F7;
+    border-color: #77A6F7;
+    color:white;
 }
