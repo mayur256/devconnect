@@ -21,7 +21,7 @@ function Navbar(){
                         </li>
                     </ul>
 
-                    <ul className="navbar-nav pull-right">
+                    <ul className="navbar-nav">
                         <li className="nav-item active">
                             <Link className="nav-link" to="/register">
                                 Register <span className="sr-only">(current)</span>
