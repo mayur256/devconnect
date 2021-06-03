@@ -1,4 +1,8 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
+import {withRouter} from "react-router-dom";
+import {registerUser} from "../../actions/auth_actions";
 import './register.css';
 class Register extends Component{
     constructor(props){
@@ -25,36 +29,20 @@ class Register extends Component{
             name: this.state.name,
             email: this.state.email,
             password: this.state.password,
-            password_confirm: this.state.password_confirm
+            password2: this.state.password_confirm
         };
-        
-        fetch('/users/register', {
-            method: 'post',
-            headers:{
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newUser)
-        })
-        .then(response => {
-            return response.json()
-        })
-        .then(data => {
-            if(data.hasError){
-                this.setState({errors: data.errors});
-            }
-            else{
-                //
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
+        this.props.registerUser(newUser, this.props.history);
+    }
+
+    //React lifecycle hook
+    componentWillReceiveProps(nextProps){
+        if(nextProps.errors){
+            this.setState({errors: nextProps.errors});
+        }
     }
 
     render(){
         const errors = this.state.errors;
-
         return(
             <div className="container">
                 <div className="row">
@@ -125,4 +113,15 @@ class Register extends Component{
     }
 }
 
-export default Register;
+//assigning proptTypes property to component for type-checking
+//of properties passed
+Register.propTypes = {
+    registerUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+} 
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+    errors: state.errors
+});
+export default connect(mapStateToProps, {registerUser})(withRouter(Register));

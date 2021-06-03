@@ -22,6 +22,9 @@
     "mongoose": "^5.11.14",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.0",
+    "redux-thunk": "^2.3.0",
     "validator": "^13.5.2"
   }
 }
