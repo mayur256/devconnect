@@ -1,17 +1,10 @@
-import {GET_ERRORS} from "./types";
+import {GET_ERRORS, SET_CURRENT_USER} from "./types";
+import {fetchWrapper} from "../utility/fetch_wrapper";
+import jwt_decode from "jwt-decode";
 //Register User
 export const registerUser = (userData, history) => dispatch => {
-    fetch('/users/register', {
-        method: 'post',
-        headers:{
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    })
-    .then(response => {
-        return response.json()
-    })
+    /**fetchWrapper(url, requestOptions) */
+    fetchWrapper('/users/register', {method: 'post', payload: userData})
     .then(data => {
         if(data.hasError){
             //this.setState({errors: data.errors});
@@ -21,7 +14,6 @@ export const registerUser = (userData, history) => dispatch => {
             });
         }
         else{
-            //
             history.push('/login');
         }
     })
@@ -32,15 +24,8 @@ export const registerUser = (userData, history) => dispatch => {
 
 //Login User
 export const loginUser = userData => dispatch => {
-    fetch("/users/login", {
-        method: 'post',
-        headers:{
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    })
-    .then(response => response.json())
+    /**fetchWrapper(url, requestOptions) */
+    fetchWrapper('/users/login', {method: 'post', payload: userData})
     .then(data => {
         if(data.hasError){
             //this.setState({errors: data.errors})
@@ -54,7 +39,27 @@ export const loginUser = userData => dispatch => {
             //set the token in localStorage
             localStorage.setItem('jwtToken', token);
             //setAuthToken(token)
+            //get user data from token
+            const decoded = jwt_decode(token);
+            dispatch(setCurrentUser(decoded));
         }
     })
     .catch(err => console.log(err));
+}
+
+//Set current User from decoded data
+export const setCurrentUser = (decoded) => {
+    return {
+        type: SET_CURRENT_USER,
+        payload: decoded
+    }
+}
+
+//Logout the current user on a specific action
+export const logoutUser = () => dispatch => {
+    //removing token from local storage
+    localStorage.removeItem('jwtToken')
+    //also remove token from Authorization header
+    //removeAuthToken()
+    dispatch(setCurrentUser({}))
 }
