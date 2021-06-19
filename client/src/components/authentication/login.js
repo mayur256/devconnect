@@ -1,5 +1,7 @@
 import React, {Component} from "react";
-
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
+import {loginUser} from "../../actions/auth_actions";
 class Login extends Component{
     constructor(props){
         super(props);
@@ -23,23 +25,25 @@ class Login extends Component{
             email: this.state.email,
             password: this.state.password
         }
-        
-        fetch("/users/login", {
-            method: 'post',
-            headers:{
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.hasError){
-                this.setState({errors: data.errors})
-            }
-        })
-        .catch(err => console.log(err));
+        this.props.loginUser(user);
     }
+
+    //React lifecycle hook
+    componentWillReceiveProps(nextProps){
+        if(nextProps.auth.isAuthenticated){
+            //this.props.history.push('/dashboard')
+        }
+        if(nextProps.errors){
+            this.setState({errors: nextProps.errors});
+        }
+    }
+    
+    componentDidMount(){
+        if(this.props.auth.isAuthenticated){
+            this.props.history.push('/dashboard');
+        }
+    }
+
     render(){
         const errors = this.state.errors;
         return(
@@ -84,4 +88,15 @@ class Login extends Component{
     }
 }
 
-export default Login;
+//assigning proptTypes property to component for type-checking
+//of properties passed
+Login.propTypes = {
+    loginUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+} 
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+    errors: state.errors
+});
+export default connect(mapStateToProps, {loginUser})(Login);

@@ -40,6 +40,11 @@ class Register extends Component{
             this.setState({errors: nextProps.errors});
         }
     }
+    componentDidMount(){
+        if(this.props.auth.isAuthenticated){
+            this.props.history.push('/dashboard');
+        }
+    }
 
     render(){
         const errors = this.state.errors;
