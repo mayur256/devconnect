@@ -1,4 +1,5 @@
-import {BrowserRouter as Router, Route}from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import PrivateRoute from "./components/common/PrivateRoute";
 import {Provider} from "react-redux";
 import store from "./store";
 import jwt_decode from "jwt-decode";
@@ -7,8 +8,10 @@ import Banner from "./components/layouts/banner";
 import Footer from "./components/layouts/footer";
 import Register from "./components/authentication/register";
 import Login from "./components/authentication/login";
+import Dashboard from "./components/dashboard/Dashboard";
+import CreateProfile from "./components/profile/CreateProfile";
 import { logoutUser, setCurrentUser } from "./actions/auth_actions";
-
+import { clearCurrentProfile } from "./actions/profile_actions";
 import './App.css';
 
 
@@ -21,10 +24,11 @@ if(localStorage.jwtToken){
   store.dispatch(setCurrentUser(decoded));
   //check if the token has expired
   const currentTimeInSec = Date.now() / 1000;
-  if(currentTimeInSec < decoded.exp){
+  if(currentTimeInSec > decoded.exp){
     //logout the user
-    store.dispatch(logoutUser())
-
+    store.dispatch(logoutUser());
+    //Clear the current profile
+    store.dispatch(clearCurrentProfile());
     //redirect to login page
     window.location.href = "/login";
   }
@@ -40,6 +44,11 @@ function App() {
           <div className="container">
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Switch>
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/create-profile" component={CreateProfile} />
+            </Switch>
+            
           </div>
           <Footer />
         </div>

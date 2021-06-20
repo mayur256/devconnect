@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {loginUser} from "../../actions/auth_actions";
+import TextFieldGroup from "../common/TextFieldGroup";
 class Login extends Component{
     constructor(props){
         super(props);
@@ -31,7 +32,7 @@ class Login extends Component{
     //React lifecycle hook
     componentWillReceiveProps(nextProps){
         if(nextProps.auth.isAuthenticated){
-            //this.props.history.push('/dashboard')
+            this.props.history.push('/dashboard')
         }
         if(nextProps.errors){
             this.setState({errors: nextProps.errors});
@@ -54,24 +55,12 @@ class Login extends Component{
                         <div className="form-container">
                             <form onSubmit={this.handleSubmit}>
                                 <h3>Login</h3><hr />
-                                <div>
-                                    <input 
-                                        className={`form-control ${errors.email ? 'is-invalid' : ''}`} 
-                                        type="email" placeholder="Email Address" 
-                                        name="email" onChange={this.handleChange}
-                                    />
-                                    <span className="invalid-feedback">{errors.email}</span>
-                                </div>
+                                <TextFieldGroup type="email" placeholder="Email Address" value={this.state.email}
+                                    name="email" onChange={this.handleChange} error={errors.email}></TextFieldGroup> 
                                 <br />
 
-                                <div>
-                                    <input 
-                                        className={`form-control ${errors.password ? 'is-invalid' : ''}`} 
-                                        type="password" placeholder="Password" 
-                                        name="password" onChange={this.handleChange}
-                                    />
-                                    <span className="invalid-feedback">{errors.password}</span>
-                                </div>
+                                <TextFieldGroup type="password" placeholder="Password" value={this.state.password}
+                                    name="password" onChange={this.handleChange} error={errors.password}></TextFieldGroup> 
                                 <br />
 
                                 <div>

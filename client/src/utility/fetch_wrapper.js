@@ -5,8 +5,7 @@ export const fetchWrapper = (url, options) => {
     let requestOptions = {
         method,
         headers: Object.assign({'Accept': 'application/json',
-                                'Content-Type': 'application/json',
-                                'Authorization': 'random token'}, headers),
+                                'Content-Type': 'application/json'}, headers),
         body: JSON.stringify(payload)
     }
     return fetch(url, requestOptions)

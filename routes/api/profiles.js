@@ -32,9 +32,9 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
         .then((profile) => {
             if(!profile){
                 errors.noprofile = "There is no profile associated with this user";
-                return res.status(404).json(errors)
+                return res.status(404).json({hasError: true,errors})
             }
-            res.send(profile)
+            res.json({hasError: false, profile});
         })
         .catch(err => res.status(404).send(err))
 })

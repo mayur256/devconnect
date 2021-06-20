@@ -1,6 +1,7 @@
 .form-container{
     margin-top: 0.5em !important;
     min-height: 500px;
+    margin-bottom: 40px;
 }
 hr{
     border:2px solid #77A6F7;
