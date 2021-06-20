@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {registerUser} from "../../actions/auth_actions";
+import TextFieldGroup from "../common/TextFieldGroup";
 import './register.css';
 class Register extends Component{
     constructor(props){
@@ -57,52 +58,21 @@ class Register extends Component{
                             <form onSubmit={this.handleSubmit}>
                                 
                                 <h3>Register</h3><hr />
-                                <div>
-                                    <input 
-                                        className={`form-control ${errors.name ? 'is-invalid' : ''}`} 
-                                        type="text" placeholder="Full Name" 
-                                        name="name" value={this.state.name}
-                                        onChange={this.handleChange}
-                                    />
-                                    <span className="invalid-feedback">{errors.name}</span>
-                                </div>
-                                
+                                <TextFieldGroup placeholder="Full Name" name="name" value={this.state.name}
+                                    onChange={this.handleChange} error={errors.name}></TextFieldGroup>
                                 <br />
 
-                                <div>
-                                    <input 
-                                        className={`form-control ${errors.email ? 'is-invalid' : ''}`} type="email" 
-                                        placeholder="Email Address" name="email" 
-                                        value={this.state.email}
-                                        onChange={this.handleChange}
-                                    />
-                                    <span className="invalid-feedback">{errors.email}</span>
-                                    <label>This site uses Gravatar, so if you want a profile image, we will use this email for it.</label>
-                                    
-                                </div>
+                                <TextFieldGroup type="email" placeholder="Email Address" name="email" value={this.state.email}
+                                    onChange={this.handleChange} error={errors.email}
+                                    info="This site uses Gravatar, so if you want a profile image, we will use this email for it."></TextFieldGroup>
                                 <br />
 
-                                <div>
-                                    <input 
-                                        className={`form-control ${errors.password ? 'is-invalid' : ''}`} name="password"
-                                        type="password" placeholder="Password" 
-                                        value={this.state.password}
-                                        onChange={this.handleChange}
-                                    />
-                                    <span className="invalid-feedback">{errors.password}</span>
-                                </div>
+                                <TextFieldGroup type="password" placeholder="Password" name="password" value={this.state.password}
+                                    onChange={this.handleChange} error={errors.password}></TextFieldGroup>
                                 <br />
 
-                                <div>
-                                    <input 
-                                        className={`form-control ${errors.password2 ? 'is-invalid' : ''}`} type="password" 
-                                        placeholder="Confirm Password"
-                                        value={this.state.password_confirm}
-                                        name="password_confirm"
-                                        onChange={this.handleChange}
-                                    />
-                                    <span className="invalid-feedback">{errors.password2}</span>
-                                </div>
+                                <TextFieldGroup type="password" placeholder="Confirm Password" name="password_confirm" value={this.state.password_confirm}
+                                    onChange={this.handleChange} error={errors.password2}></TextFieldGroup>
                                 <br />
 
                                 <div>
