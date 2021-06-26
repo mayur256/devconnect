@@ -5,7 +5,7 @@ const TextAreaFieldGroup = ({name, placeholder, value, error, info, onChange}) =
 {
     return(
         <div>
-            <input 
+            <textarea 
                 className={classnames('form-control', {
                     'is-invalid': error
                 })}

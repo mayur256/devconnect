@@ -2,11 +2,23 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getCurrentProfile } from "../../actions/profile_actions";
+import { getCurrentProfile, deleteAccount } from "../../actions/profile_actions";
 import Spinner from "../common/Spinner";
+import ProfileActions from "./ProfileActions";
+import Experience from "./Experience";
+import Education from "./Education";
 class Dashboard extends Component{
+    constructor(props){
+        super(props);
+        this.deleteHandler = this.deleteHandler.bind(this);
+    }
+
     componentDidMount(){
         this.props.getCurrentProfile();
+    }
+
+    deleteHandler(){
+        this.props.deleteAccount();
     }
 
     render(){
@@ -19,7 +31,14 @@ class Dashboard extends Component{
         else{
             //check if logged in user has profile data
             if(Object.keys(profile).length){
-                dashboardContent = <h4>DISPLAY PROFILE</h4>;
+                dashboardContent = (
+                    <div>
+                        <h5>Welcome, <Link to={`/profile/${profile.handle}`}><strong>{user.name}</strong></Link></h5>
+                        <ProfileActions />
+                        <Experience experience={profile.experience} />
+                        <Education education={profile.education} />
+                    </div>
+                );
             }
             else{
                 dashboardContent = (
@@ -34,10 +53,14 @@ class Dashboard extends Component{
         }
         return(
             <div className="dashboard">
-                <div className="container">
+                <div className="container form-container">
                     <div className="row">
                         <div className="col-md-12">
-                            <h1 className="display-4">Dashboard</h1>
+                            <h1 className="display-4 inline-block">Dashboard</h1>
+                            <button type="button" style={{marginTop: '10px'}} 
+                                className="inline-block pull-right btn btn-danger"
+                                onClick={this.deleteHandler}
+                            >Delete My Account</button>
                             {dashboardContent}
                         </div>
                     </div>
@@ -50,7 +73,8 @@ class Dashboard extends Component{
 Dashboard.propTypes = {
     getCurrentProfile: PropTypes.func.isRequired,
     profile: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    deleteAccount: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -58,4 +82,4 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps, {getCurrentProfile})(Dashboard);
+export default connect(mapStateToProps, {getCurrentProfile, deleteAccount})(Dashboard);

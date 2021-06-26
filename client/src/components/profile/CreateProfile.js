@@ -1,10 +1,13 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Link, withRouter } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import SelectFieldGroup from "../common/SelectFieldGroup";
 import InputGroup from "../common/InputGroup";
+import {createProfile, getCurrentProfile} from "../../actions/profile_actions";
+import isEmpty from "../../utility/is_empty";
 class CreateProfile extends Component{
     constructor(props){
         super(props);
@@ -49,9 +52,74 @@ class CreateProfile extends Component{
 
     handleSubmit(e){
         e.preventDefault();
+        const profileData = {
+            handle: this.state.handle,
+            company: this.state.company,
+            website: this.state.website,
+            location: this.state.location,
+            status: this.state.status,
+            skills: this.state.skills,
+            gitHubUserName: this.state.gitHubUserName,
+            bio: this.state.bio,
+            twitter: this.state.twitter,
+            facebook: this.state.facebook,
+            linkedin: this.state.linkedin,
+            youtube: this.state.youtube,
+            instagram: this.state.instagram
+        }
+
+        this.props.createProfile(profileData, this.props.history);
     }
+    
+    //this function is called when a component recieves new props
+    //or its internal state is updated/changed
+    /*componentDidUpdate(newProps){
+        console.log(newProps);
+    }*/
+    componentWillReceiveProps(newProps){
+        if(newProps.errors){
+            this.setState({errors: newProps.errors});
+        }
+        if(newProps.profile.profile){
+            this.initializeProfileState(newProps.profile.profile);
+        }
+    }
+
+    componentDidMount(){
+        if(!this.props.profile.profile){
+            this.props.getCurrentProfile();
+        }
+        else{
+            this.initializeProfileState(this.props.profile.profile);
+        }
+    }
+
+    initializeProfileState(profile){
+        if(!isEmpty(profile)){
+            const skills = !isEmpty(profile.skills) ? profile.skills.join(',') : '';
+            this.setState({
+                handle: !isEmpty(profile.handle) ? profile.handle : '',
+                company: !isEmpty(profile.company) ? profile.company : '',
+                website: !isEmpty(profile.website) ? profile.website : '',
+                location: !isEmpty(profile.location) ? profile.location : '',
+                status: !isEmpty(profile.status) ? profile.status : '',
+                skills: skills,
+                gitHubUserName: !isEmpty(profile.gitHubUserName) ? profile.gitHubUserName : '',
+                bio: !isEmpty(profile.bio) ? profile.bio : '',
+                twitter: !isEmpty(profile.social.twitter) ? profile.social.twitter : '',
+                facebook: !isEmpty(profile.social.facebook) ? profile.social.facebook : '',
+                linkedin: !isEmpty(profile.social.linkedin) ? profile.social.linkedin : '',
+                youtube: !isEmpty(profile.social.youtube) ? profile.social.youtube : '',
+                instagram: !isEmpty(profile.social.instagram) ? profile.social.instagram : '' 
+            });
+        }
+        
+    }
+
     render(){
-        const errors = this.state.errors;
+        const {errors} = this.state;
+        const {profile} = this.props;
+        const profileTitle = !isEmpty(profile.profile) ? 'Edit Profile' : 'Create Your Profile';
         let socialInputs = null;
         if(this.state.displaySocialInputs){
             socialInputs = (
@@ -88,10 +156,13 @@ class CreateProfile extends Component{
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8 m-auto">
+                            <Link to="/dashboard" className="mt-2 btn btn-light">
+                                Go Back
+                            </Link>
                             <div className="form-container">
-                                <h2 className="display-4 text-centre">Create Your Profile</h2>
+                                <h2 className="display-4 text-centre">{profileTitle}</h2>
                                 <p>Let's get some information to make you profile stand out.</p>
-                                <small className="d-block pb-3">* = required field</small>
+                                <small className="d-block pb-3">Fields marked as * are required</small>
 
                                 <form onSubmit={this.handleSubmit}>
                                     {/**Profile Handle Input */}
@@ -130,7 +201,7 @@ class CreateProfile extends Component{
                                     /><br/>
 
                                     {/**Skills of a Developer */}
-                                    <TextFieldGroup placeholder="Skills" name="skills"
+                                    <TextFieldGroup placeholder="* Skills" name="skills"
                                         value={this.state.skills} onChange={this.handleChange}
                                         error={errors.skills}
                                         info="Please use comma separated values (eg. HTML, CSS, JS, PHP)."
@@ -151,7 +222,7 @@ class CreateProfile extends Component{
                                     /><br/>
 
                                     <div className="mb-3">
-                                        <button className="btn btn-light" onClick={() => {
+                                        <button type="button" className="btn btn-light" onClick={() => {
                                             this.setState(state => ({
                                                 displaySocialInputs: !state.displaySocialInputs
                                             }));
@@ -175,11 +246,13 @@ class CreateProfile extends Component{
 }
 CreateProfile.propTypes = {
     profile: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
+    errors: PropTypes.object.isRequired,
+    createProfile: PropTypes.func.isRequired,
+    getCurrentProfile: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     profile: state.profile,
     errors: state.errors
 });
-export default connect(null)(CreateProfile);
+export default connect(mapStateToProps, {createProfile, getCurrentProfile})(withRouter(CreateProfile));

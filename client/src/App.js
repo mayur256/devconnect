@@ -9,6 +9,8 @@ import Footer from "./components/layouts/footer";
 import Register from "./components/authentication/register";
 import Login from "./components/authentication/login";
 import Dashboard from "./components/dashboard/Dashboard";
+import AddExperience from "./components/profile/AddExperience";
+import AddEducation from "./components/profile/AddEducation";
 import CreateProfile from "./components/profile/CreateProfile";
 import { logoutUser, setCurrentUser } from "./actions/auth_actions";
 import { clearCurrentProfile } from "./actions/profile_actions";
@@ -47,6 +49,9 @@ function App() {
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/create-profile" component={CreateProfile} />
+              <PrivateRoute exact path="/edit-profile" component={CreateProfile} />
+              <PrivateRoute exact path="/add-experience" component={AddExperience} />
+              <PrivateRoute exact path="/add-education" component={AddEducation} />
             </Switch>
             
           </div>

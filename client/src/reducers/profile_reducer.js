@@ -1,4 +1,4 @@
-import {PROFILE_LOADING, GET_PROFILE, CLEAR_CURRENT_PROFILE} from "../actions/types";
+import {PROFILE_LOADING, GET_PROFILE, CLEAR_CURRENT_PROFILE, SET_CURRENT_USER} from "../actions/types";
 const initialState = {
     profile: null,
     profiles: null,

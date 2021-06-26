@@ -26,7 +26,7 @@ InputGroup.propTypes = {
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    value: PropTypes.string,
     placeholder: PropTypes.string,
     info: PropTypes.string,
     error: PropTypes.string,
