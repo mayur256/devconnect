@@ -1,6 +1,5 @@
 import spinner from "../../images/spinner.gif";
 function Spinner(){
-    console.log(spinner);
     return(
         <div>
             <img 

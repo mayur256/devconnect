@@ -36,7 +36,7 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
             }
             res.json({hasError: false, profile});
         })
-        .catch(err => res.status(404).send(err))
+        .catch(err => res.status(400).send(err))
 })
 
 /**
@@ -94,7 +94,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
         location: req.body.location ? req.body.location : '',
         bio: req.body.bio ? req.body.bio : '',
         status: req.body.status ? req.body.status : '',
-        githubusername: req.body.githubusername ? req.body.githubusername : '',
+        gitHubUserName: req.body.gitHubUserName ? req.body.gitHubUserName : '',
         company: req.body.company ? req.body.company : '', 
         social: {}
     }
@@ -115,7 +115,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     let {errors, isValid} = validateProfileInput(inputs);
 
     if(!isValid){
-        return res.status(400).json(errors);
+        return res.status(400).json({hasError: !isValid, errors});
     }
 
     if(inputs.skills){
@@ -126,7 +126,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
             if(profile){
                 //if profile exists then update the profile
                 Profile.findOneAndUpdate({user: req.user.id}, {$set: inputs}, {new: true})
-                    .then(profile => res.json(profile))
+                    .then(profile => res.json({hasError: false, profile}))
             }
             else{
                 //if profile does not exists then create one
@@ -136,11 +136,11 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
                         if(profile){
                             //set error profile already exists
                             errors.handle = "Profile with this handle already exists"
-                            return res.status(400).json(errors)
+                            return res.status(400).json({hasError: true, errors})
                         }
 
                         //save the profile
-                        new Profile(inputs).save().then(profile => res.json(profile))
+                        new Profile(inputs).save().then(profile => res.json({hasError: false, profile}))
                     })
             }
         })
@@ -154,7 +154,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 router.post('/experience/store', passport.authenticate('jwt', {session: false}), (req, res) => {
     const {errors, isValid} = validateExperienceInput(req.body);
     if(!isValid){
-        return res.status(400).json(errors);
+        return res.status(400).json({hasError: !isValid, errors});
     }
     Profile.findOne({user: req.user.id}).then(profile => {
         if(profile){
@@ -170,7 +170,7 @@ router.post('/experience/store', passport.authenticate('jwt', {session: false}),
             
             profile.experience.unshift(newExp);
 
-            profile.save().then(profile => res.json(profile));
+            profile.save().then(profile => res.json({hasError: false, profile}));
         }
     })
 });
@@ -183,7 +183,7 @@ router.post('/experience/store', passport.authenticate('jwt', {session: false}),
 router.post('/education/store', passport.authenticate('jwt', {session: false}), (req, res) => {
     const {errors, isValid} = validateEducationInput(req.body);
     if(!isValid){
-        return res.status(400).json(errors);
+        return res.status(400).json({hasError: !isValid, errors});
     }
     Profile.findOne({user: req.user.id}).then(profile => {
         if(profile){
@@ -199,7 +199,7 @@ router.post('/education/store', passport.authenticate('jwt', {session: false}), 
             
             profile.education.unshift(newEdu);
 
-            profile.save().then(profile => res.json(profile));
+            profile.save().then(profile => res.json({hasError: false, profile}));
         }
     })
 });
@@ -218,8 +218,8 @@ router.delete("/experience/delete/:id", passport.authenticate('jwt', {session: f
         //remove the experience from array
         profile.experience.splice(removeIndex, 1)
 
-        profile.save().then(profile => res.json(profile))
-        .catch(err => res.status(500).json(err))
+        profile.save().then(profile => res.json({hasError: false, profile}))
+        .catch(err => res.status(500).json({hasError: true, err}))
     })
 });
 
@@ -237,8 +237,8 @@ router.delete("/education/delete/:id", passport.authenticate('jwt', {session: fa
         //remove the experience from array
         profile.education.splice(removeIndex, 1)
 
-        profile.save().then(profile => res.json(profile))
-        .catch(err => res.status(500).json(err))
+        profile.save().then(profile => res.json({hasError: false, profile}))
+        .catch(err => res.status(500).json({hasError: true, err}))
     })
 });
 
@@ -251,7 +251,7 @@ router.delete('/delete', passport.authenticate('jwt', {session: false}), (req, r
     if(req.user){
         Profile.findOneAndRemove({user: req.user.id}, {useFindAndModify: false}).then(() => {
             User.findOneAndRemove({_id: req.user.id}, {useFindAndModify: false}).then(() => {
-                res.json({status: 'Delete success'})
+                res.json({hasError: false, status: 'Delete success'})
             })
         })
     }
