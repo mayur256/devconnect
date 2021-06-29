@@ -51,13 +51,13 @@ router.get("/handle/:handle", (req, res) => {
         .then(profile => {
             if(!profile){
                 errors.noprofile = "No Profile found";
-                return res.status(404).json(errors)
+                return res.status(400).json({hasError: true, errors})
             }
             else{
-                res.json(profile)
+                res.json({hasError: false, profile});
             }
         })
-        .catch(err => res.status(404).json(err))
+        .catch(err => res.status(500).json({hasError: true, errors: err}))
 })
 
 /**
@@ -161,7 +161,7 @@ router.post('/experience/store', passport.authenticate('jwt', {session: false}),
             const newExp = {
                 title: req.body.title,
                 company: req.body.company,
-                location: req.body.location0,
+                location: req.body.location,
                 from: req.body.from,
                 to: req.body.to,
                 current: req.body.current,
@@ -257,4 +257,15 @@ router.delete('/delete', passport.authenticate('jwt', {session: false}), (req, r
     }
 })
 
+/**
+ * @path /profiles/all
+ * @desc to get all Priofiles
+ * @access public
+ */
+router.get('/all', (req, res) => {
+    Profile.find({}).populate('user', ['name', 'avatar', 'handle'])
+    .then(profiles => {
+        res.send({hasError: false, profiles});
+    })
+})
 module.exports = router

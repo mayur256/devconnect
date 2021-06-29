@@ -1,4 +1,5 @@
-import {PROFILE_LOADING, GET_PROFILE, CLEAR_CURRENT_PROFILE, SET_CURRENT_USER} from "../actions/types";
+import {PROFILE_LOADING, GET_PROFILE, CLEAR_CURRENT_PROFILE, GET_PROFILES} from "../actions/types";
+import isEmpty from "../utility/is_empty";
 const initialState = {
     profile: null,
     profiles: null,
@@ -17,7 +18,7 @@ export default function profileReducer(state = initialState, action){
             return{
                 ...state,
                 profile: action.payload,
-                loading: false
+                loading: isEmpty(action.payload)
             }
 
         case CLEAR_CURRENT_PROFILE:
@@ -25,6 +26,14 @@ export default function profileReducer(state = initialState, action){
                 ...state,
                 profile: null
             }
+
+        case GET_PROFILES:
+            return {
+                ...state,
+                profiles: action.payload,
+                loading: false
+            }
+
         default:
             return state;
     }

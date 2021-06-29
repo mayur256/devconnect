@@ -12,9 +12,12 @@ import Dashboard from "./components/dashboard/Dashboard";
 import AddExperience from "./components/profile/AddExperience";
 import AddEducation from "./components/profile/AddEducation";
 import CreateProfile from "./components/profile/CreateProfile";
+import ViewProfile from "./components/profiles/ViewProfile";
+import Profiles from "./components/profiles/Profiles";
 import { logoutUser, setCurrentUser } from "./actions/auth_actions";
 import { clearCurrentProfile } from "./actions/profile_actions";
 import './App.css';
+
 
 
 //Check for the token
@@ -46,6 +49,8 @@ function App() {
           <div className="container">
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/developers" component={Profiles} />
+            <Route exact path="/profile/:handle" component={ViewProfile} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/create-profile" component={CreateProfile} />
