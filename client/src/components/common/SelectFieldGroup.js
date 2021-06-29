@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const SelectFieldGroup = ({name, value, error, info, onChange, options}) => 
 {
     const SelectOptions = options.map(option => {
-        return (<option key={option.key} value={option.key}>
+        return (<option key={option.key} value={option.value}>
             {option.value}
         </option>)
     });

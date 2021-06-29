@@ -3,9 +3,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {deleteExperience} from "../../actions/profile_actions";
 class Experience extends Component{
-    constructor(props){
-        super(props);
-    }
 
     onDelete(expId){
         this.props.deleteExperience(expId);

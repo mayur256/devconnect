@@ -1,6 +1,6 @@
 import {fetchWrapper} from "../utility/fetch_wrapper";
 import { GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE, 
-    GET_ERRORS, SET_CURRENT_USER } from "./types";
+    GET_ERRORS, SET_CURRENT_USER, GET_PROFILES } from "./types";
 
 //gets a profile data
 export const getCurrentProfile = () => dispatch => {
@@ -116,4 +116,22 @@ export const deleteEducation = eduId => dispatch => {
             console.log(err);
         })
     }
+}
+
+//get all Profiles of the System
+export const getProfiles = () => dispatch => {
+    fetchWrapper('/profiles/all', {method: 'GET'})
+    .then(data => {
+        if(!data.hasError) dispatch({type: GET_PROFILES, payload: data.profiles});
+        if(data.hasError) dispatch({type: GET_PROFILES, payload: {}});
+    })
+}
+
+//get Profile data by profile handle
+export const getProfileByHandle = handle => dispatch => {
+    fetchWrapper(`/profiles/handle/${handle}`, {method: 'GET'})
+    .then(data => {
+        if(!data.hasError) dispatch({type: GET_PROFILE, payload: data.profile});
+        if(data.hasError) dispatch({type: GET_PROFILE, payload: {}});
+    })
 }

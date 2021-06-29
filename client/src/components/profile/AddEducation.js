@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
-import {getCurrentProfile, addEducation} from "../../actions/profile_actions";
+import {addEducation} from "../../actions/profile_actions";
 
 class AddEducation extends Component{
     constructor(props){

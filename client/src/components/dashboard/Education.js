@@ -3,9 +3,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {deleteEducation} from "../../actions/profile_actions";
 class Education extends Component{
-    constructor(props){
-        super(props);
-    }
 
     onDelete(eduId){
         this.props.deleteEducation(eduId);
