@@ -16,7 +16,13 @@ class Navbar extends Component{
         const authLinks = (
             <ul className="navbar-nav">
                 <li className="nav-item active">
-                    <span style={{cursor: 'pointer'}}className="nav-link" onClick={this.onLogoutClick.bind(this)}>
+                    <Link className="nav-link" to="/dashboard">
+                        Dashboard <span className="sr-only">(current)</span>
+                    </Link>
+                    
+                </li> 
+                <li className="nav-item active">
+                    <span style={{cursor: 'pointer'}} className="nav-link" onClick={this.onLogoutClick.bind(this)}>
                         <img src={user.avatar} alt={user.name} title="A Gravatar associated with you email"
                             style={{width:'25px', marginRight: '5px'}} className="rounded-circle"/>
                             Logout
@@ -57,6 +63,11 @@ class Navbar extends Component{
                             <li className="nav-item active">
                                 <Link className="nav-link" to="/developers">
                                     Developers <span className="sr-only">(current)</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item active">
+                                <Link className="nav-link" to="/post-feed">
+                                    Post Feed <span className="sr-only">(current)</span>
                                 </Link>
                             </li>
                         </ul>

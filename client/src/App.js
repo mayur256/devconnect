@@ -14,6 +14,8 @@ import AddEducation from "./components/profile/AddEducation";
 import CreateProfile from "./components/profile/CreateProfile";
 import ViewProfile from "./components/profiles/ViewProfile";
 import Profiles from "./components/profiles/Profiles";
+import Posts from "./components/posts/Posts";
+import PostComment from "./components/posts/PostComment";
 import { logoutUser, setCurrentUser } from "./actions/auth_actions";
 import { clearCurrentProfile } from "./actions/profile_actions";
 import './App.css';
@@ -57,6 +59,8 @@ function App() {
               <PrivateRoute exact path="/edit-profile" component={CreateProfile} />
               <PrivateRoute exact path="/add-experience" component={AddExperience} />
               <PrivateRoute exact path="/add-education" component={AddEducation} />
+              <PrivateRoute exact path="/post-feed" component={Posts} />
+              <PrivateRoute exact path="/post/:id/comment" component={PostComment} />
             </Switch>
             
           </div>

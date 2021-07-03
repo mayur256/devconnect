@@ -2,8 +2,11 @@
     background-color:#77A6F7;
 }
 .landing{
-    min-height: 83vh;;
-    background-image: url("./images/banner.jpg");
+    display: flex;
+    align-items: center;
+    min-height: 83vh;
+    background-image: url("./images/banner_007.jpg");
+    color:white;
     background-size: cover;
     background-repeat: no-repeat;
 }
