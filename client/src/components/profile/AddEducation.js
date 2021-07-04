@@ -108,7 +108,7 @@ class AddEducation extends Component{
                                             name="current" id="current" value={this.state.current}
                                             checked={this.state.current} onChange={this.onChecked}
                                         />
-                                        <label htmlFor="current" className="form-check-label">Current Job</label>
+                                        <label htmlFor="current" className="form-check-label">Currently Attending</label>
                                     </div>
                                     
                                     <TextAreaFieldGroup placeholder="Course / Degree Description" name="description"

@@ -3,8 +3,8 @@ import isEmpty from "../../../utility/is_empty";
 class ProfileAbout extends Component{    
     render(){
         const profile = this.props.profile;
-        const bioTitle = profile.user.name.split(' ')[0] + "'s Bio";
-
+        const bioTitle = profile.user?.name?.split(' ')[0] + "'s Bio";
+        
         return (
             <div className="row">
                 <div className="col-md-12">

@@ -18,7 +18,7 @@ export default function profileReducer(state = initialState, action){
             return{
                 ...state,
                 profile: action.payload,
-                loading: isEmpty(action.payload)
+                loading: false
             }
 
         case CLEAR_CURRENT_PROFILE:
