@@ -34,9 +34,9 @@ class ProfileGithub extends Component{
                 <div className="row">
                     <div className="col-md-6">
                         <h5>
-                            <Link to={repo.html_url} className="text-info" target="_blank" rel="noreferrer">
+                            <a href={repo.html_url} className="text-info" rel="noreferrer" target="_parent">
                                 {repo.name}
-                            </Link>
+                            </a>
                         </h5>
                         <p>{repo.description}</p>
                     </div>
