@@ -30,7 +30,16 @@ router.post('/create', passport.authenticate('jwt', {session: false}), (req, res
             avatar: req.user.avatar,
             user: req.user.id
         });
-        newPost.save().then(post => res.json({hasError: false, post}))
+        Profile.findOne({user: req.user.id}).then(profile => {
+            if(profile){
+                newPost.save().then(post => res.json({hasError: false, post}));
+            }
+            else{
+                let errors = {text: 'You need to create a profile first before making any posts.'}
+                res.status(400).json({hasError: true, errors});
+            }
+        })
+        
     }
 });
 
@@ -149,9 +158,20 @@ router.post("/comments/:id", passport.authenticate('jwt', {session: false}), (re
                 user: req.user.id
             }
 
-            post.comments.unshift(newComment);
+            Profile.findOne({user: req.user.id}).then(profile => {
+                if(profile){
+                    post.comments.unshift(newComment);
 
-            post.save().then(post => res.json({hasError: false, post}));
+                    post.save().then(post => res.json({hasError: false, post}));
+                }
+                else{
+                    let errors = {text: 'You need to create a profile before commenting on a post'}
+                    res.status(400).json({hasError: true, errors});
+                }
+            })
+            .catch(err => {
+                res.status(500).json({hasError: true, errors: 'Something went wrong'})
+            })
         })
         .catch(err => res.status(400).json({hasError: true, error: "Post not found"}));
 })

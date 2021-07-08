@@ -22,10 +22,10 @@ class Navbar extends Component{
                     
                 </li> 
                 <li className="nav-item active">
-                    <span style={{cursor: 'pointer'}} className="nav-link" onClick={this.onLogoutClick.bind(this)}>
+                    <span title="Logout" style={{cursor: 'pointer'}} className="nav-link" onClick={this.onLogoutClick.bind(this)}>
                         <img src={user.avatar} alt={user.name} title="A Gravatar associated with you email"
                             style={{width:'25px', marginRight: '5px'}} className="rounded-circle"/>
-                            Logout
+                            <i class="fas fa-sign-out-alt"></i> {user.name} 
                     </span>
                 </li>
             </ul>

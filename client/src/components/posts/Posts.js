@@ -23,6 +23,7 @@ class Posts extends Component{
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12">
+                            <label>Please create a Profile first, otherwise you would not be able to like other people's posts or create your own</label>
                             <PostForm />
                             <br />
                             {postsContent}
