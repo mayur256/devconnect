@@ -19,11 +19,11 @@ class ProfileHeader extends Component{
                             <p className="lead text-center">{profile.status} at {profile.company}</p>
                             {!isEmpty(profile.location) ? (<p>{profile.location}</p>) : null}
                             <p>
-                                {!isEmpty(profile.website) ? (<a target="_blank" href={`https://${profile.website}`}><i className="fas fa-globe fa-2x mr-2"></i></a>) : null}
-                                {!isEmpty(profile.social.twitter) ? (<a target="_blank" href={`https://${profile.social.twitter}`}><i className="fab fa-twitter fa-2x mr-2"></i></a>) : null}
-                                {!isEmpty(profile.social.facebook) ? (<a target="_blank" href={`https://${profile.social.facebook}`}><i className="fab fa-facebook fa-2x mr-2"></i></a>) : null}
-                                {!isEmpty(profile.social.linkedin) ? (<a target="_blank" href={`https://${profile.social.linkedin}`}><i className="fab fa-linkedin fa-2x mr-2"></i></a>) : null}
-                                {!isEmpty(profile.social.instagram) ? (<a target="_blank" href={`https://${profile.social.instagram}`}><i className="fab fa-instagram fa-2x mr-2"></i></a>) : null}
+                                {!isEmpty(profile.website) ? (<a target="_blank" href={`https://${profile.website}`} rel="noreferrer"><i className="fas fa-globe fa-2x mr-2"></i></a>) : null}
+                                {!isEmpty(profile.social.twitter) ? (<a target="_blank" href={`https://${profile.social.twitter}`} rel="noreferrer"><i className="fab fa-twitter fa-2x mr-2"></i></a>) : null}
+                                {!isEmpty(profile.social.facebook) ? (<a target="_blank" href={`https://${profile.social.facebook}`} rel="noreferrer"><i className="fab fa-facebook fa-2x mr-2"></i></a>) : null}
+                                {!isEmpty(profile.social.linkedin) ? (<a target="_blank" href={`https://${profile.social.linkedin}`} rel="noreferrer"><i className="fab fa-linkedin fa-2x mr-2"></i></a>) : null}
+                                {!isEmpty(profile.social.instagram) ? (<a target="_blank" href={`https://${profile.social.instagram}`} rel="noreferrer"><i className="fab fa-instagram fa-2x mr-2"></i></a>) : null}
                             </p>
                         </div>
                     </div>

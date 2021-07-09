@@ -1,5 +1,5 @@
 import {PROFILE_LOADING, GET_PROFILE, CLEAR_CURRENT_PROFILE, GET_PROFILES} from "../actions/types";
-import isEmpty from "../utility/is_empty";
+//import isEmpty from "../utility/is_empty";
 const initialState = {
     profile: null,
     profiles: null,
