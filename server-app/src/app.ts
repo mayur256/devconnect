@@ -4,21 +4,21 @@ import { createServer, Server } from 'http';
 
 // Application class
 class App {
-  private express: Application;
-  private httpServer: Server | undefined;
+    private express: Application;
+    private httpServer: Server | undefined;
 
-  constructor() {
-    this.express = express();
-    this.initHttpServer();
-  }
+    constructor() {
+        this.express = express();
+        this.initHttpServer();
+    }
 
-  initHttpServer(): void {
-    this.httpServer = createServer(this.express);
-  }
+    initHttpServer(): void {
+        this.httpServer = createServer(this.express);
+    }
 
-  getHttpServer(): Server | undefined {
-    return this.httpServer;
-  }
+    getHttpServer(): Server | undefined {
+        return this.httpServer;
+    }
 }
 
 const app = new App();

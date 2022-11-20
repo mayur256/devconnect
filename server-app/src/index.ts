@@ -5,5 +5,5 @@ import appServer from './app';
 const PORT = process.env.PORT || 4001;
 
 appServer?.listen(PORT, (): void => {
-  console.log(`Server listening on port ${PORT}`);
+    console.log(`Server listening on port ${PORT}`);
 });
