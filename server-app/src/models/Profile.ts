@@ -1,8 +1,8 @@
 import { Document, Schema, model, SchemaType } from 'mongoose';
 
 // models
-import { experienceSchema } from './Experience';
-import { educationSchema } from './Education';
+// import { experienceSchema } from './Experience';
+// import { educationSchema } from './Education';
 
 const modelName = 'Profile';
 
@@ -22,8 +22,8 @@ interface IProfile extends Document{
     skills: Array<Skills>;
     bio: string;
     gitHubUserName: string;
-    experience: Array<typeof experienceSchema>;
-    education: Array<typeof educationSchema>;
+    // experience: Array<typeof experienceSchema>;
+    // education: Array<typeof educationSchema>;
     created_at: Date;
     updated_at: Date | null;
 };
@@ -64,8 +64,8 @@ const profileSchema = new Schema<IProfile>({
     gitHubUserName: {
         type: String
     },
-    experience: [experienceSchema],
-    education: [educationSchema],
+    // experience: [experienceSchema],
+    // education: [educationSchema],
     created_at: {
         type: Date,
         default: Date.now

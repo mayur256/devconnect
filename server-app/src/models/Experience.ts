@@ -1,9 +1,10 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, Schema, model, SchemaType } from 'mongoose';
 
 const modelName = 'Experience';
 
 // type definition for experience schema
 interface IExperience extends Document {
+    profile: SchemaType;
     title: string;
     company: string;
     location: string;
@@ -13,7 +14,11 @@ interface IExperience extends Document {
     description: string;
 };
 
-export const experienceSchema = new Schema<IExperience>({
+const experienceSchema = new Schema<IExperience>({
+    profile: {
+        type: Schema.Types.ObjectId,
+        ref: 'Profile'
+    },
     title: {
         type: String,
         required: true
