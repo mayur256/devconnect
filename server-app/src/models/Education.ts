@@ -1,9 +1,10 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, Schema, model, SchemaType } from 'mongoose';
 
 const modelName = 'Education';
 
 // type definition for experience schema
 interface IEducation extends Document {
+    profile: SchemaType;
     school: string;
     degree: string;
     field: string;
@@ -13,7 +14,11 @@ interface IEducation extends Document {
     description: string;
 };
 
-export const educationSchema = new Schema<IEducation>({
+const educationSchema = new Schema<IEducation>({
+    profile: {
+        type: Schema.Types.ObjectId,
+        ref: 'Profile'
+    },
     school: {
         type: String,
         required: true
