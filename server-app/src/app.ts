@@ -5,6 +5,9 @@ import { createServer, Server } from 'http';
 // Routes assembler
 import assembleRoutes from './routes';
 
+// Database connection handler
+import dbHandler from './database';
+
 // Application class
 class App {
     private express: Application;
@@ -16,6 +19,8 @@ class App {
         this.initHttpServer();
         // enable routing
         this.mountRoutes();
+        // connect with database
+        this.dbConnect();
     }
 
     initHttpServer(): void {
@@ -35,6 +40,14 @@ class App {
     parseJsonBody(): void {
         this.express.use(express.urlencoded({ extended: true }));
         this.express.use(express.json());
+    }
+
+    dbConnect(): void {
+        try {
+            dbHandler.connect();
+        } catch {
+            dbHandler.disconnect();
+        }
     }
 }
 
