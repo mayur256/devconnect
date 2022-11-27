@@ -1,6 +1,9 @@
 // common package imports
-import express, { Application } from 'express';
+import express, { Application, Router } from 'express';
 import { createServer, Server } from 'http';
+
+// Routes assembler
+import assembleRoutes from './routes';
 
 // Application class
 class App {
@@ -9,7 +12,10 @@ class App {
 
     constructor() {
         this.express = express();
+        // init HTTP server with app
         this.initHttpServer();
+        // enable routing
+        this.mountRoutes();
     }
 
     initHttpServer(): void {
@@ -18,6 +24,17 @@ class App {
 
     getHttpServer(): Server | undefined {
         return this.httpServer;
+    }
+
+    mountRoutes(): void {
+        const router = Router();
+        assembleRoutes(router);
+        this.express.use('/api/v1', router);
+    }
+
+    parseJsonBody(): void {
+        this.express.use(express.urlencoded({ extended: true }));
+        this.express.use(express.json());
     }
 }
 
