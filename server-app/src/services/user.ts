@@ -20,12 +20,9 @@ class UserService {
 
     createUser = async (userFields: IUser): Promise<any> => {
         let user = null;
-        try {
-            user = new User(userFields);
-            await user.save();
-        } catch (e) {
-            console.log(e);
-        }
+        // instantiate user model and save
+        user = new User(userFields);
+        await user.save();
 
         return user;
     }
