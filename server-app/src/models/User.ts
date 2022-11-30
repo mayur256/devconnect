@@ -1,21 +1,14 @@
+// mongoose lib
 import { Document, Schema, model } from 'mongoose';
+// types
+import { IUser } from '../types/User';
 
 const modelName = 'User';
 
-// type definition for User model fields
-interface IUser extends Document {
-    name: string;
-    email: string;
-    password: string;
-    online: boolean;
-    avatar: string | null;
-    created_at: Date | null;
-    updated_at: Date | null;
-    deleted_at: Date | null;
-};
+interface UserSchema extends Document, IUser {};
 
 // User schema definition
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<UserSchema>({
     name: {
         type: String,
         required: true,
@@ -58,4 +51,4 @@ const userSchema = new Schema<IUser>({
     }
 });
 
-export default model<IUser>(modelName, userSchema);
+export default model<UserSchema>(modelName, userSchema);
