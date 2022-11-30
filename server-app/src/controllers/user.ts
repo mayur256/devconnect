@@ -49,6 +49,7 @@ class UserController {
             console.log(`Error in User controller :: ${e}`);
         }
 
+        // send the response after all the processing is done
         res.status(httpStatus).json(response);
     }
 };
