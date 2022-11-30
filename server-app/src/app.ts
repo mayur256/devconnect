@@ -17,6 +17,7 @@ class App {
         this.express = express();
         // init HTTP server with app
         this.initHttpServer();
+        this.parseRequestBody();
         // enable routing
         this.mountRoutes();
         // connect with database
@@ -37,7 +38,7 @@ class App {
         this.express.use('/api/v1', router);
     }
 
-    parseJsonBody(): void {
+    parseRequestBody(): void {
         this.express.use(express.urlencoded({ extended: true }));
         this.express.use(express.json());
     }
