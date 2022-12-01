@@ -1,6 +1,7 @@
 // Models
 import User from '../models/User';
-
+// Mail
+import appMailer from '../email';
 // types
 import { IUser } from '../types/User';
 
@@ -34,7 +35,18 @@ class UserService {
         user = new User(userFields);
         await user.save();
 
+        await this.sendInvitationMail(userFields.email);
+
         return user;
+    }
+
+    /**
+     * @param {string} toEmail
+     * @returns {boolean}
+     * @desc - Sends a mail and returns boolean value depicting whether mail is sent
+     */
+    sendInvitationMail = async (toEmail: string): Promise<boolean> => {
+        return await appMailer.sendEmail({ to: toEmail });
     }
 };
 
