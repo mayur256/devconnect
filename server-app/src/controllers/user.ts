@@ -1,11 +1,16 @@
 // Express lib
 import { Response, Request } from 'express';
 
+// express-validator lib
+import { validationResult } from 'express-validator';
+
 // Services
 import userServ from '../services/user';
+// import { ValidationErrorResult } from '../types/Common';
 
 // Utils
 import { STATUS, STATUS_CODE } from '../utils/constant';
+import { errorTranformation } from '../utils/Common';
 
 /**
  * Handles HTTP requests for user entities
@@ -25,22 +30,32 @@ class UserController {
      */
     public register = async (req: Request, res: Response): Promise<void> => {
         // Reponse Object
-        const response: {status: string, data: any} = {
+        const response: { status: string, data: any } = {
             status: STATUS.SUCCESS,
             data: null
         };
         let httpStatus = STATUS_CODE.OK;
 
         try {
-            // Check if user already exists with same email
-            const doesUserExists = await this.userService.userExists(req.body.email);
-            if (doesUserExists) {
-                response.status = STATUS.ERROR;
-                response.data = 'User already exists';
-                httpStatus = STATUS_CODE.CLIENT_ERROR;
+            // validate the request body and evaluate the result
+            const validationError = validationResult(req);
+
+            if (validationError.isEmpty()) {
+                // Validation was successful
+                // Check if user already exists with same email
+                const doesUserExists = await this.userService.userExists(req.body.email);
+                if (doesUserExists) {
+                    response.status = STATUS.ERROR;
+                    response.data = 'User already exists';
+                    httpStatus = STATUS_CODE.CLIENT_ERROR;
+                } else {
+                    // create a user if it does not already exists
+                    response.data = this.userService.createUser(req.body);
+                }
             } else {
-                // create a user if it does not already exists
-                response.data = this.userService.createUser(req.body);
+                response.status = STATUS.ERROR;
+                response.data = errorTranformation(validationError.array());
+                httpStatus = STATUS_CODE.CLIENT_ERROR;
             }
         } catch (e) {
             response.status = STATUS.ERROR;

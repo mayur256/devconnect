@@ -1,7 +1,7 @@
 // common package imports
-import express, { Application, Router, Request, Response, NextFunction } from 'express';
+import express, { Application, Router } from 'express';
 import { createServer, Server } from 'http';
-import { ValidationError } from 'express-validation';
+// import { ValidationError } from 'express-validation';
 
 // Routes assembler
 import assembleRoutes from './routes';
@@ -22,7 +22,7 @@ class App {
         // enable routing
         this.mountRoutes();
         // attach global request error handler
-        this.setGlobalValidationErrorHandler();
+        // this.setGlobalValidationErrorHandler();
         // connect with database
         this.dbConnect();
     }
@@ -54,7 +54,7 @@ class App {
         }
     }
 
-    setGlobalValidationErrorHandler(): void {
+    /* setGlobalValidationErrorHandler(): void {
         this.express.use((err: any, req: Request, res: Response, next: NextFunction) => {
             // handle validation error from express-validation libraary
             if (err instanceof ValidationError) {
@@ -62,7 +62,7 @@ class App {
             }
             return next(err);
         });
-    }
+    } */
 }
 
 const app = new App();
