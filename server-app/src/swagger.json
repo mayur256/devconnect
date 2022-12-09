@@ -10,13 +10,7 @@
         "url": "https://opensource.org/licenses/MIT"
     },
     "host": "localhost:4001",
-    "basePath": "/",
-    "tags": [
-        {
-            "name": "Users",
-            "description": "API for users in the system"
-        }
-    ],
+    "basePath": "/api/v1",
     "schemes": [
         "http"
     ],
@@ -25,5 +19,45 @@
     ],
     "produces": [
         "application/json"
-    ]
+    ],
+
+    "paths": {
+        "/user/register": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Creates a new user in the system",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "name": { 
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
 }
