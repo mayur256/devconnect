@@ -16,6 +16,7 @@
     "@types/http-server": "^0.12.1",
     "@types/node": "^18.11.9",
     "@types/nodemailer": "^6.4.6",
+    "@types/swagger-ui-express": "^4.1.3",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
     "eslint": "^8.27.0",
@@ -35,6 +36,7 @@
     "express": "^4.18.2",
     "express-validator": "^6.14.2",
     "mongoose": "^6.7.3",
-    "nodemailer": "^6.8.0"
+    "nodemailer": "^6.8.0",
+    "swagger-ui-express": "^4.6.0"
   }
 }

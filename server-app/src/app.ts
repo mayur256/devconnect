@@ -1,6 +1,11 @@
 // common package imports
 import express, { Application, Router } from 'express';
 import { createServer, Server } from 'http';
+import swaggerUi from 'swagger-ui-express';
+
+// Swagger doc specification
+import * as swaggerDoc from './swagger.json';
+
 // import { ValidationError } from 'express-validation';
 
 // Routes assembler
@@ -25,6 +30,7 @@ class App {
         // this.setGlobalValidationErrorHandler();
         // connect with database
         this.dbConnect();
+        this.initSwagger();
     }
 
     initHttpServer(): void {
@@ -63,6 +69,10 @@ class App {
             return next(err);
         });
     } */
+
+    initSwagger(): void {
+        this.express.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+    }
 }
 
 const app = new App();
