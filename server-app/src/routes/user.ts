@@ -8,8 +8,10 @@ import type { Router } from 'express';
 import userController from '../controllers/user';
 
 // Validation schemas
-import { userRegisterSchema } from '../validation/schemas';
+import { userLoginSchema, userRegisterSchema } from '../validation/schemas';
 
 export default function (router: Router) {
+    // public routes
     router.post('/user/register', userRegisterSchema, userController.register);
+    router.post('/user/login', userLoginSchema, userController.login);
 };

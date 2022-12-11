@@ -18,3 +18,10 @@ export const userRegisterSchema = [
             minNumbers: 1
         }).withMessage('Password must be greater than 8 and contain at least one uppercase letter, one lowercase letter, and one number')
 ];
+
+export const userLoginSchema = [
+    check('email')
+        .notEmpty().withMessage('Email / Username is required!')
+        .isEmail().withMessage('Invalid email'),
+    check('password').notEmpty().withMessage('Password is required!!'),
+];
