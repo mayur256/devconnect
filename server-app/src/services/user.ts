@@ -32,11 +32,11 @@ class UserService {
     createUser = async (userFields: IUser): Promise<any> => {
         let user = null;
         // instantiate user model and save
+        userFields.password = User.generatePassword(userFields.password);
         user = new User(userFields);
         await user.save();
 
         await this.sendInvitationMail(userFields.email);
-
         return user;
     }
 
@@ -56,7 +56,12 @@ class UserService {
      * @desc -  matches user with given credentials or null
      */
     attemptLogin = async (email: string, password: string): Promise<any> => {
-        return await User.findOne({ email, password });
+        const user = await User.findOne({ email }).lean();
+        if (user && User.validatePassword(password, user?.password)) {
+            const { password, ...rest } = user;
+            return rest;
+        }
+        return user;
     }
 };
 

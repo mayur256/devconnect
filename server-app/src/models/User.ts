@@ -1,11 +1,24 @@
+// top level imports
+// bcrypt for hashing
+import * as bcrypt from 'bcryptjs';
 // mongoose lib
-import { Document, Schema, model } from 'mongoose';
+import { Document, Schema, model, Model } from 'mongoose';
 // types
 import { IUser } from '../types/User';
 
 const modelName = 'User';
 
-interface UserSchema extends Document, IUser {};
+interface UserSchema extends Document, IUser {
+};
+
+interface IUserMethods {
+    makeHidden: (fieldKey: string) => any;
+}
+
+interface UserModel extends Model<IUser, {}, IUserMethods> {
+    generatePassword: (rawPassword: string) => string;
+    validatePassword: (rawPassword: string, hashedPassword: string) => boolean;
+}
 
 // User schema definition
 const userSchema = new Schema<UserSchema>({
@@ -22,7 +35,7 @@ const userSchema = new Schema<UserSchema>({
 
     password: {
         type: String,
-        required: true
+        required: true,
     },
 
     online: {
@@ -51,4 +64,29 @@ const userSchema = new Schema<UserSchema>({
     }
 });
 
-export default model<UserSchema>(modelName, userSchema);
+// Static methods on schema - starts
+
+// generates hashed password
+userSchema.statics.generatePassword = function (rawPassword: string): string {
+    const salt = bcrypt.genSaltSync();
+    return bcrypt.hashSync(rawPassword, salt);
+}
+
+// validates hashed password
+userSchema.statics.validatePassword = function (rawPassword: string, hashedPassword: string): boolean {
+    return bcrypt.compareSync(rawPassword, hashedPassword);
+}
+
+// Static methods on schema - ends
+
+// Instance methods - starts
+
+/* userSchema.methods.makeHidden = function (fieldKey: string): any {
+    const r = this.lean();
+    delete r.password;
+    return r;
+} */
+
+// Instance methods - ends
+
+export default model<UserSchema, UserModel>(modelName, userSchema);
