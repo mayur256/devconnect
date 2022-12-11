@@ -48,6 +48,16 @@ class UserService {
     sendInvitationMail = async (toEmail: string): Promise<boolean> => {
         return await appMailer.sendEmail({ to: toEmail });
     }
+
+    /**
+     * @param {string} email
+     * @param {string} password
+     * @returns {any} matched user
+     * @desc -  matches user with given credentials or null
+     */
+    attemptLogin = async (email: string, password: string): Promise<any> => {
+        return await User.findOne({ email, password });
+    }
 };
 
 export default new UserService();
