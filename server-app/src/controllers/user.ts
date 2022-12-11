@@ -50,7 +50,7 @@ class UserController {
                     httpStatus = STATUS_CODE.CLIENT_ERROR;
                 } else {
                     // create a user if it does not already exists
-                    response.data = this.userService.createUser(req.body);
+                    response.data = await this.userService.createUser(req.body);
                 }
             } else {
                 response.status = STATUS.ERROR;
@@ -68,6 +68,11 @@ class UserController {
         res.status(httpStatus).json(response);
     }
 
+    /**
+     * @param {Request} req
+     * @param {Response} res
+     * @desc - Attempts a user login with credentials in request
+     */
     public login = async (req: Request, res: Response): Promise<void> => {
         // Reponse Object
         const response: { status: string, data: any } = {
