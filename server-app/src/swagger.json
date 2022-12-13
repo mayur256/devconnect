@@ -9,10 +9,14 @@
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
     },
-    "host": "localhost:4001",
-    "basePath": "/api/v1",
+    "servers": [
+        {
+            "url": "http://localhost/4001/api/v1",
+            "description": "Development server"
+        }
+    ],
     "schemes": [
-        "http"
+        "https"
     ],
     "consumes": [
         "application/json"
@@ -34,6 +38,71 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User is registered successfully",
+                        "content": {
+                            "application/json": {
+                                "type": "object",
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "example": "success"
+                                    },
+                                    "data": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/user/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Authenticates a user to the system",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User is logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "type": "object",
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "example": "success"
+                                    },
+                                    "data": {
+                                        "type": "object"
+                                    }
+                                }
                             }
                         }
                     }
