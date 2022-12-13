@@ -1,9 +1,14 @@
+// common npm packages
+import * as jwt from 'jsonwebtoken';
 // Models
 import User from '../models/User';
 // Mail
 import appMailer from '../email';
 // types
 import { IUser } from '../types/User';
+
+// Utils
+import { FRONT_URL, SECRET } from '../utils/constant';
 
 /**
  * Service container for user entity
@@ -62,6 +67,18 @@ class UserService {
             return rest;
         }
         return user;
+    }
+
+    /**
+     * @param { _id: string } payload
+     * @returns - JWT signed token
+     */
+    generateToken = (payload: {_id: string}) => {
+        const options = {
+            expiresIn: '364d',
+            issuer: FRONT_URL
+        }
+        return jwt.sign(payload, SECRET, options);
     }
 };
 

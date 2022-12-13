@@ -16,3 +16,5 @@ export const STATUS_CODE = {
 };
 export const MAIL_USER = process.env.MAIL_USER;
 export const MAIL_PASS = process.env.MAIL_PASS;
+export const FRONT_URL = process.env.FRONT_URL;
+export const SECRET = process.env.SECRET as string;
