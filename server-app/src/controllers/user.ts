@@ -89,6 +89,11 @@ class UserController {
                 // Validation was successful
                 const loginUser = await this.userService.attemptLogin(email, password);
                 if (loginUser?._id) {
+                    const payload = {
+                        _id: loginUser._id
+                    }
+                    const token = this.userService.generateToken(payload);
+                    res.setHeader('set-cookie', `authorization=${token}`);
                     response.data = loginUser;
                 } else {
                     response.status = STATUS.ERROR;
