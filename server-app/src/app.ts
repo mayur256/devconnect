@@ -2,6 +2,7 @@
 import express, { Application, Router } from 'express';
 import { createServer, Server } from 'http';
 import swaggerUi from 'swagger-ui-express';
+import cors from 'cors'
 
 // Swagger doc specification
 import * as swaggerDoc from './swagger.json';
@@ -26,6 +27,7 @@ class App {
         this.parseRequestBody();
         // enable routing
         this.mountRoutes();
+        this.enableCors();
         // attach global request error handler
         // this.setGlobalValidationErrorHandler();
         // connect with database
@@ -72,6 +74,14 @@ class App {
 
     initSwagger(): void {
         this.express.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+    }
+
+    enableCors() {
+        const corsOptions = {
+            origin: 'http://localhost:4001',
+        };
+
+        this.express.use(cors(corsOptions));
     }
 }
 
