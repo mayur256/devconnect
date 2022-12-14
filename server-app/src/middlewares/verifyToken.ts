@@ -1,6 +1,6 @@
 // JWT lib
 import * as jwt from 'jsonwebtoken';
-// Express-JWT middleware
+// Express lib
 import { NextFunction, Request, Response } from 'express';
 // Utils
 import { FRONT_URL, SECRET, STATUS } from '../utils/constant';
