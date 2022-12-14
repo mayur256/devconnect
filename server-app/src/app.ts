@@ -2,7 +2,8 @@
 import express, { Application, Router } from 'express';
 import { createServer, Server } from 'http';
 import swaggerUi from 'swagger-ui-express';
-import cors from 'cors'
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 // Swagger doc specification
 import * as swaggerDoc from './swagger.json';
@@ -25,6 +26,7 @@ class App {
         // init HTTP server with app
         this.initHttpServer();
         this.parseRequestBody();
+        this.parseCookies();
         // enable routing
         this.mountRoutes();
         this.enableCors();
@@ -82,6 +84,11 @@ class App {
         };
 
         this.express.use(cors(corsOptions));
+    }
+
+    // use cookie parser middleware for express
+    parseCookies = (): void => {
+        this.express.use(cookieParser());
     }
 }
 
