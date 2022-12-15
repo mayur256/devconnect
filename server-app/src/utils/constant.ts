@@ -14,6 +14,8 @@ export const STATUS_CODE = {
     CLIENT_ERROR: 400,
     INTERNAL_SERVER_ERROR: 500
 };
+export const NODE_ENV = process.env.NODE_ENV;
+export const HOST = process.env.HOST;
 export const MAIL_USER = process.env.MAIL_USER;
 export const MAIL_PASS = process.env.MAIL_PASS;
 export const FRONT_URL = process.env.FRONT_URL;

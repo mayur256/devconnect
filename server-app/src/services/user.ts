@@ -8,7 +8,7 @@ import appMailer from '../email';
 import { IUser } from '../types/User';
 
 // Utils
-import { FRONT_URL, SECRET } from '../utils/constant';
+import { FRONT_URL, HOST, NODE_ENV, PORT, SECRET } from '../utils/constant';
 import { IMailBody } from '../types/Common';
 
 /**
@@ -53,12 +53,22 @@ class UserService {
      */
     sendInvitationMail = async (toEmail: string, name: string, userId: string): Promise<boolean> => {
         const token = this.generateToken({ _id: userId }, '7d');
+        const hostUrl = (NODE_ENV === 'development' ? 'http' : 'https') + '://' + HOST + (PORT ? ':' + PORT : '');
+        const verificationLink = `${hostUrl}/user?token=${token}`;
         const mailBodyKeys: Partial<IMailBody> = {
             subject: 'Please verify your devconnect account',
             body: `
-                <h5>Account verificaion!</h5>
-                <p>Hello, <strong>${name}</strong></p>
-                <a href="${token}">Click here to verify your account</a>
+                <h2>Account verification!</h2>
+                <p>Hello, <strong>${name}!</strong></p>
+                <a href="${verificationLink}">Click here to verify your account</a>
+                <br /><br />
+                <em>The above link is only valid for 7 days</em>
+                <br />
+                <p>
+                    Thanks, <br />
+                    <strong>Devconnect<sup>TM<sup></strong>
+                </p>
+
             `,
         }
         // set the token for user in db
