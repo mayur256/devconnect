@@ -2,6 +2,8 @@
 export interface IUser {
     name: string;
     email: string;
+    is_verified: boolean;
+    token: string | null;
     password: string;
     online: boolean;
     avatar: string | null;

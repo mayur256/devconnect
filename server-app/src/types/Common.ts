@@ -4,3 +4,8 @@ export interface ValidationErrorResult {
     value?: string;
     location?: string
 };
+
+export interface IMailBody {
+    subject: string;
+    body: string;
+};
