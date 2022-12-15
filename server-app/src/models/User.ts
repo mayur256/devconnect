@@ -33,6 +33,16 @@ const userSchema = new Schema<UserSchema>({
         unique: true,
     },
 
+    token: {
+        type: String,
+        default: null
+    },
+
+    is_verified: {
+        type: Boolean,
+        default: false
+    },
+
     password: {
         type: String,
         required: true,

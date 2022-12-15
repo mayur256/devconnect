@@ -1,7 +1,9 @@
 // Nodemailer lib
 import nodemailer from 'nodemailer';
 // Utils
-import { MAIL_PASS, MAIL_USER } from '../utils/constant';
+import { MAIL_FROM, MAIL_HOST, MAIL_PASS, MAIL_USER } from '../utils/constant';
+// Types
+import { IMailBody } from '../types/Common';
 
 /**
  * Class module to configure and send email
@@ -12,7 +14,7 @@ class Mail {
 
     constructor() {
         this.mailTransport = nodemailer.createTransport({
-            host: 'smtp.mailtrap.io',
+            host: MAIL_HOST,
             port: 2525,
             auth: {
                 user: MAIL_USER,
@@ -24,13 +26,13 @@ class Mail {
 
     sendEmail = async ({
         to,
-        // mailBodyKeys
-    }: { to: string, mailBodyKeys?: any }): Promise<boolean> => {
+        mailBodyKeys
+    }: { to: string, mailBodyKeys?: Partial<IMailBody> }): Promise<boolean> => {
         const message = {
-            from: 'from-example@email.com',
+            from: MAIL_FROM,
             to,
-            subject: 'Welcome',
-            html: '<h1>Welcome</h1>'
+            subject: mailBodyKeys?.subject ?? 'Welcome',
+            html: mailBodyKeys?.body ?? '<h1>Welcome</h1>'
         };
 
         const result = await this.mailTransport.sendMail(message);

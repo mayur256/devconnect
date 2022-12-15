@@ -92,7 +92,8 @@ class UserController {
                     const payload = {
                         _id: loginUser._id
                     }
-                    const token = this.userService.generateToken(payload);
+                    const tokenExpiryDuration = '364d';
+                    const token = this.userService.generateToken(payload, tokenExpiryDuration);
                     res.setHeader('set-cookie', `authorization=${token}`);
                     response.data = loginUser;
                 } else {

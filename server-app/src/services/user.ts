@@ -9,6 +9,7 @@ import { IUser } from '../types/User';
 
 // Utils
 import { FRONT_URL, SECRET } from '../utils/constant';
+import { IMailBody } from '../types/Common';
 
 /**
  * Service container for user entity
@@ -41,7 +42,7 @@ class UserService {
         user = new User(userFields);
         await user.save();
 
-        await this.sendInvitationMail(userFields.email);
+        await this.sendInvitationMail(userFields.email, userFields.name, user?._id?.toString());
         return user;
     }
 
@@ -50,8 +51,20 @@ class UserService {
      * @returns {boolean}
      * @desc - Sends a mail and returns boolean value depicting whether mail is sent
      */
-    sendInvitationMail = async (toEmail: string): Promise<boolean> => {
-        return await appMailer.sendEmail({ to: toEmail });
+    sendInvitationMail = async (toEmail: string, name: string, userId: string): Promise<boolean> => {
+        const token = this.generateToken({ _id: userId }, '7d');
+        const mailBodyKeys: Partial<IMailBody> = {
+            subject: 'Please verify your devconnect account',
+            body: `
+                <h5>Account verificaion!</h5>
+                <p>Hello, <strong>${name}</strong></p>
+                <a href="${token}">Click here to verify your account</a>
+            `,
+        }
+        // set the token for user in db
+        await User.findOneAndUpdate({ _id: userId }, { token });
+
+        return await appMailer.sendEmail({ to: toEmail, mailBodyKeys });
     }
 
     /**
@@ -73,9 +86,9 @@ class UserService {
      * @param { _id: string } payload
      * @returns - JWT signed token
      */
-    generateToken = (payload: {_id: string}) => {
+    generateToken = (payload: {_id: string}, expiresIn: string) => {
         const options = {
-            expiresIn: '364d',
+            expiresIn,
             issuer: FRONT_URL
         }
         return jwt.sign(payload, SECRET, options);
