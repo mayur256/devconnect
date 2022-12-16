@@ -43,6 +43,8 @@ class UserService {
         await user.save();
 
         await this.sendInvitationMail(userFields.email, userFields.name, user?._id?.toString());
+        user = user.toObject();
+        delete user.password;
         return user;
     }
 
