@@ -4,6 +4,6 @@ import type { Router } from 'express';
 // Component routes
 import userRoutes from './user';
 
-export default function (router: Router) {
+export function assembleRoutes (router: Router) {
     userRoutes(router);
 };
