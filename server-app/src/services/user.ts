@@ -54,7 +54,7 @@ class UserService {
     sendInvitationMail = async (toEmail: string, name: string, userId: string): Promise<boolean> => {
         const token = this.generateToken({ _id: userId }, '7d');
         const hostUrl = (NODE_ENV === 'development' ? 'http' : 'https') + '://' + HOST + (PORT ? ':' + PORT : '');
-        const verificationLink = `${hostUrl}/user?token=${token}`;
+        const verificationLink = `${hostUrl}/verify-account?token=${token}`;
         const mailBodyKeys: Partial<IMailBody> = {
             subject: 'Please verify your devconnect account',
             body: `

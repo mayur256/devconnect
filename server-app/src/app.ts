@@ -11,7 +11,7 @@ import * as swaggerDoc from './swagger.json';
 // import { ValidationError } from 'express-validation';
 
 // Routes assembler
-import { assembleRoutes } from './routes';
+import { assembleRoutes, miscellaneousRoutes } from './routes';
 
 // Database connection handler
 import dbHandler from './database';
@@ -48,7 +48,9 @@ class App {
     mountRoutes(): void {
         const router = Router();
         assembleRoutes(router);
-        this.express.use('/api/v1', router);
+        miscellaneousRoutes(router);
+        this.express.use('/', router); // common public routes
+        this.express.use('/api/v1', router); // api routes
     }
 
     parseRequestBody(): void {

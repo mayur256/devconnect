@@ -115,6 +115,33 @@ class UserController {
         // send the response after all the processing is done
         res.status(httpStatus).json(response);
     }
+
+    /**
+     * @param {Request} req
+     * @param {Response} res
+     * @desc - Verifies an user account
+     */
+    public verifyAccount = async (req: Request, res: Response): Promise<void> => {
+        const { token = '' } = req.query;
+
+        // Reponse Object
+        let responseDoc = '<h1>Account is verified!</h1>';
+        let httpStatus = STATUS_CODE.OK;
+
+        try {
+            if (token) {
+                // token is present. validate it
+                // const verificationResult = this.userService.verifyAccount(token);
+            } else {
+                responseDoc = '<h2>Token is missing</h2>';
+                httpStatus = STATUS_CODE.CLIENT_ERROR;
+            }
+        } catch {
+
+        }
+        res.setHeader('Content-Type', 'text/html');
+        res.status(httpStatus).send(responseDoc)
+    }
 };
 
 export default new UserController(userServ);
