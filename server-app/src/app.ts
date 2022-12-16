@@ -11,7 +11,7 @@ import * as swaggerDoc from './swagger.json';
 // import { ValidationError } from 'express-validation';
 
 // Routes assembler
-import assembleRoutes from './routes';
+import { assembleRoutes } from './routes';
 
 // Database connection handler
 import dbHandler from './database';
