@@ -103,6 +103,45 @@ class UserService {
         }
         return jwt.sign(payload, SECRET, options);
     }
+
+    /**
+     * @param {string} token
+     * @returns - verifies a account based on token in the request
+     */
+    verifyAccount = async(token: string): Promise<any> => {
+        // check whether given token is for a user in our system
+        try {
+            const user = await User.findOne({ token });
+            if (user?._id) {
+                const decoded = this.verifyToken(token, '7d');
+                // remove token from user when it is verified
+                if (decoded) {
+                    user.token = null;
+                    user.is_verified = true;
+                    await user.save();
+                }
+                return decoded;
+            } else {
+                throw new Error('Invalid Token!');
+            }
+        } catch (ex: any) {
+            return ex;
+        }
+    }
+
+    /**
+     * @param {string} token
+     * @param {string} expiresIn
+     * @returns - returns a decoded token on success or throws an error
+     */
+    verifyToken = (token: string, expiresIn: string): any => {
+        const options = {
+            expiresIn,
+            issuer: FRONT_URL
+        };
+
+        return jwt.verify(token, SECRET, options);
+    }
 };
 
 export default new UserService();
