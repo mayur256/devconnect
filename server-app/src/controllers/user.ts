@@ -131,16 +131,19 @@ class UserController {
         try {
             if (token) {
                 // token is present. validate it
-                // const verificationResult = this.userService.verifyAccount(token);
+                const result = await this.userService.verifyAccount(token);
+                if (result instanceof Error) throw result;
             } else {
-                responseDoc = '<h2>Token is missing</h2>';
+                responseDoc = '<h2>Token is missing!</h2>';
                 httpStatus = STATUS_CODE.CLIENT_ERROR;
             }
-        } catch {
-
+        } catch (ex: any) {
+            httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
+            responseDoc = `<h2>${ex}</h2>`
         }
+
         res.setHeader('Content-Type', 'text/html');
-        res.status(httpStatus).send(responseDoc)
+        res.status(httpStatus).send(responseDoc);
     }
 };
 
