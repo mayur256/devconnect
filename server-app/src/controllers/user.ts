@@ -145,6 +145,33 @@ class UserController {
         res.setHeader('Content-Type', 'text/html');
         res.status(httpStatus).send(responseDoc);
     }
+
+    /**
+    * @param {Request} req
+    * @param {Response} res
+    * @desc - updates general profile section
+    */
+    public updateProfileGeneral = async (req: Request, res: Response): Promise<void> => {
+        // Reponse Object
+        const response: { status: string, data: any } = {
+            status: STATUS.SUCCESS,
+            data: null
+        };
+        let httpStatus = STATUS_CODE.OK;
+
+        try {
+            const { decoded, ...rest } = req.body;
+            await this.userService.updateProfileGeneral({ user: decoded._id, ...rest });
+        } catch (e) {
+            response.status = STATUS.ERROR;
+            response.data = null;
+            httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
+            console.log(`Error in User controller :: ${e}`);
+        }
+
+        // send the response after all the processing is done
+        res.status(httpStatus).json(response);
+    }
 };
 
 export default new UserController(userServ);

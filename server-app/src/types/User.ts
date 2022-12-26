@@ -11,3 +11,24 @@ export interface IUser {
     updated_at: Date | null;
     deleted_at: Date | null;
 };
+
+// General Profile types
+type Skills = {
+    id: string;
+    alias: string;
+}
+
+export interface IProfileGeneral {
+    handle: string;
+    company: string;
+    website: string;
+    location: string;
+    status: string;
+    skills: Array<Skills>;
+    bio: string;
+    gitHubUserName: string;
+    // experience: Array<typeof experienceSchema>;
+    // education: Array<typeof educationSchema>;
+    created_at: Date;
+    updated_at: Date | null;
+};
