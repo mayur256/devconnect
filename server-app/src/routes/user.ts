@@ -16,7 +16,5 @@ export default function (router: Router) {
     router.post('/user/login', userLoginSchema, userController.login);
 
     // protected routes
-    router.get('/test', verifyToken, function (req: any, res: any) {
-        res.send('Im in');
-    })
+    router.post('/user/profile/general', verifyToken, userController.updateProfileGeneral);
 };

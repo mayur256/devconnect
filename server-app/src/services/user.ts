@@ -5,7 +5,7 @@ import User from '../models/User';
 // Mail
 import appMailer from '../email';
 // types
-import { IUser } from '../types/User';
+import { IProfileGeneral, IUser } from '../types/User';
 
 // Utils
 import { FRONT_URL, HOST, NODE_ENV, PORT, SECRET } from '../utils/constant';
@@ -143,6 +143,15 @@ class UserService {
         };
 
         return jwt.verify(token, SECRET, options);
+    }
+
+    /**
+     * @param {IUser} userFields
+     * @returns {Promise<any>}
+     * @desc - creates a user with user fields provided in the request body
+     */
+    updateProfileGeneral = async (generalProfile: IProfileGeneral): Promise<void> => {
+        console.log(generalProfile);
     }
 };
 

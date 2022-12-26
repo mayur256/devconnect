@@ -4,28 +4,14 @@ import { Document, Schema, model, SchemaType } from 'mongoose';
 // import { experienceSchema } from './Experience';
 // import { educationSchema } from './Education';
 
+// types
+import { IProfileGeneral } from '../types/User';
+
 const modelName = 'Profile';
 
-interface Skills {
-    id: string;
-    alias: string;
-}
-
 // type definitions for Profile
-interface IProfile extends Document{
+interface IProfile extends Document, IProfileGeneral{
     user: SchemaType;
-    handle: string;
-    company: string;
-    website: string;
-    location: string;
-    status: string;
-    skills: Array<Skills>;
-    bio: string;
-    gitHubUserName: string;
-    // experience: Array<typeof experienceSchema>;
-    // education: Array<typeof educationSchema>;
-    created_at: Date;
-    updated_at: Date | null;
 };
 
 const profileSchema = new Schema<IProfile>({
