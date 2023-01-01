@@ -23,5 +23,11 @@ export const userLoginSchema = [
     check('email')
         .notEmpty().withMessage('Email / Username is required!')
         .isEmail().withMessage('Invalid email'),
-    check('password').notEmpty().withMessage('Password is required!!'),
+    check('password').notEmpty().withMessage('Password is required!'),
+];
+
+export const generalProfileSchema = [
+    check('handle').notEmpty().withMessage('Handle is required!'),
+    check('status').notEmpty().withMessage('Status is required!'),
+    check('skills').notEmpty().withMessage('Skills is required'),
 ];
