@@ -1,7 +1,10 @@
 // common npm packages
 import * as jwt from 'jsonwebtoken';
+
 // Models
 import User from '../models/User';
+import Profile from '../models/Profile';
+
 // Mail
 import appMailer from '../email';
 // types
@@ -151,7 +154,8 @@ class UserService {
      * @desc - creates a user with user fields provided in the request body
      */
     updateProfileGeneral = async (generalProfile: IProfileGeneral): Promise<void> => {
-        console.log(generalProfile);
+        const profile = new Profile(generalProfile)
+        await profile.save();
     }
 };
 

@@ -8,7 +8,7 @@ import { verifyToken } from '../middlewares/verifyToken';
 import userController from '../controllers/user';
 
 // Validation schemas
-import { userLoginSchema, userRegisterSchema } from '../validation/schemas';
+import { userLoginSchema, userRegisterSchema, generalProfileSchema } from '../validation/schemas';
 
 export default function (router: Router) {
     // public routes
@@ -16,5 +16,5 @@ export default function (router: Router) {
     router.post('/user/login', userLoginSchema, userController.login);
 
     // protected routes
-    router.post('/user/profile/general', verifyToken, userController.updateProfileGeneral);
+    router.post('/user/profile/general', verifyToken, generalProfileSchema, userController.updateProfileGeneral);
 };

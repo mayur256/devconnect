@@ -155,13 +155,21 @@ class UserController {
         // Reponse Object
         const response: { status: string, data: any } = {
             status: STATUS.SUCCESS,
-            data: null
+            data: 'Profile saved successfully!'
         };
         let httpStatus = STATUS_CODE.OK;
 
         try {
-            const { decoded, ...rest } = req.body;
-            await this.userService.updateProfileGeneral({ user: decoded._id, ...rest });
+            // validate the request body and evaluate the result
+            const validationError = validationResult(req);
+            if (validationError.isEmpty()) {
+                const { decoded, ...rest } = req.body;
+                await this.userService.updateProfileGeneral({ user: decoded._id, ...rest });
+            } else {
+                response.status = STATUS.ERROR;
+                response.data = errorTranformation(validationError.array());
+                httpStatus = STATUS_CODE.CLIENT_ERROR;
+            }
         } catch (e) {
             response.status = STATUS.ERROR;
             response.data = null;
