@@ -108,6 +108,45 @@
                     }
                 }
             }
+        },
+
+        "/user/profile/general": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Creates / Updates a profile for the authenticated user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/Profile"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profile saved successfully!",
+                        "content": {
+                            "application/json": {
+                                "type": "object",
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "example": "success"
+                                    },
+                                    "data": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
 
@@ -123,6 +162,43 @@
                         "type": "string"
                     },
                     "password": {
+                        "type": "string"
+                    }
+                }
+            },
+
+            "Profile": {
+                "type": "object",
+                "properties": {
+                    "handle": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "skills": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        },
+                        "example": [{
+                            "id": "it",
+                            "alias": "IT"
+                        }]
+                    },
+                    "company": {
+                        "type": "string"
+                    },
+                    "website": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "bio": {
+                        "type": "string"
+                    },
+                    "gitHubUserName": {
                         "type": "string"
                     }
                 }
