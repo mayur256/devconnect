@@ -19,13 +19,18 @@ const postSchema = new Schema<IPostSchema>({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    attachments: {
+        type: [String],
+        default: ['']
+    },
     content: {
         type: String,
         required: true
     },
     visibility: {
         type: String,
-        enum: ['public', 'private']
+        enum: ['public', 'private'],
+        default: 'public'
     },
     created_at: {
         type: Date,
