@@ -32,4 +32,7 @@ export const generalProfileSchema = [
     check('skills').notEmpty().withMessage('Skills is required'),
 ];
 
-export const createPostSchema = [];
+export const createPostSchema = [
+    check('content').notEmpty().withMessage('Post content is required!'),
+    check('visibility').isIn(['', 'public', 'private']).withMessage('Invalid visibility value')
+];
