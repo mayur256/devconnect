@@ -31,3 +31,5 @@ export const generalProfileSchema = [
     check('status').notEmpty().withMessage('Status is required!'),
     check('skills').notEmpty().withMessage('Skills is required'),
 ];
+
+export const createPostSchema = [];
