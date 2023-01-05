@@ -13,5 +13,11 @@ import { createPostSchema } from '../validation/schemas';
 
 export default function (router: Router) {
     // protected routes
-    router.post('/post', verifyToken, fileUpload.array('attachments', 10), createPostSchema, postController.createPost);
+    router.post(
+        '/post',
+        fileUpload.array('attachments', 10),
+        verifyToken,
+        createPostSchema,
+        postController.createPost
+    );
 };
