@@ -32,14 +32,14 @@ class PostController {
             data: null
         };
         let httpStatus = STATUS_CODE.OK;
-
+        console.log(req.files)
         try {
             // validate the request body and evaluate the result
             const validationError = validationResult(req);
             // proceed if there are no validation errors
             if (validationError.isEmpty()) {
-                const { decoded, ...rest } = req.body;
-                response.data = await this.postService.createPost({ user: decoded._id, ...rest });
+                // const { decoded, ...rest } = req.body;
+                // response.data = await this.postService.createPost({ user: decoded._id, ...rest });
             } else {
                 response.status = STATUS.ERROR;
                 response.data = errorTranformation(validationError.array());
