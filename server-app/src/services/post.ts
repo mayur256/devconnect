@@ -54,6 +54,10 @@ class PostService {
         post = this.getPostById(postId)
         return post;
     }
+
+    getAllPosts = async (): Promise<Array<IPost>> => {
+        return await Post.find();
+    }
 };
 
 export default new PostService();

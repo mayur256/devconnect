@@ -27,4 +27,5 @@ export default function (router: Router) {
         createPostSchema,
         postController.updatePost
     );
+    router.get('/post/:postId?', postController.getPosts)
 };

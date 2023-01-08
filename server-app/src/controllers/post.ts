@@ -104,7 +104,41 @@ class PostController {
             response.status = STATUS.ERROR;
             response.data = null;
             httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
-            console.log(`Error in Post->createPost method :: ${e}`);
+            console.log(`Error in Post->updatePost method :: ${e}`);
+        }
+
+        // send the response after all the processing is done
+        res.status(httpStatus).json(response);
+    }
+
+    /**
+     * @param {Request} req
+     * @param {Response} res
+     * @desc - based on presence of posId it return a post or array of post
+     */
+    public getPosts = async (req: Request, res: Response): Promise<void> => {
+        // Reponse Object
+        const response: { status: string, data: any } = {
+            status: STATUS.SUCCESS,
+            data: null
+        };
+        let httpStatus = STATUS_CODE.OK;
+
+        try {
+            const { postId = '' } = req.params
+
+            if (postId && Types.ObjectId.isValid(postId)) {
+                // get a post by id
+                response.data = await this.postService.getPostById(postId);
+            } else {
+                // get all posts
+                response.data = await this.postService.getAllPosts();
+            }
+        } catch (e) {
+            response.status = STATUS.ERROR;
+            response.data = null;
+            httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
+            console.log(`Error in Post->getPosts method :: ${e}`);
         }
 
         // send the response after all the processing is done
