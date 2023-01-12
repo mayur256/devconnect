@@ -1,10 +1,12 @@
 // top level imports
+import fs from 'node:fs'
 
 // Models
 import Post from '../models/Post';
 
 // types
 import { IPost } from '../types/Post';
+
 /**
  * Service container for Post entity
  */
@@ -55,8 +57,22 @@ class PostService {
         return post;
     }
 
+    /**
+     * @returns {Array<IPost>}
+     * @desc - returns all the posts in the system
+     */
     getAllPosts = async (): Promise<Array<IPost>> => {
         return await Post.find();
+    }
+
+    deletePostById = async (postId: string): Promise<void> => {
+        const postToBeDeleted = await this.getPostById(postId);
+        // delete all attachments for the post
+        for (const file of postToBeDeleted.attachments) {
+            fs.unlinkSync(`/tmp/uploads/${file}`);
+        }
+
+        await Post.findOneAndDelete({ _id: postId });
     }
 };
 
