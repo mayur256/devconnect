@@ -27,5 +27,6 @@ export default function (router: Router) {
         createPostSchema,
         postController.updatePost
     );
-    router.get('/post/:postId?', postController.getPosts)
+    router.get('/post/:postId?', postController.getPosts);
+    router.delete('/post/:postId', verifyToken, postController.deletePost);
 };

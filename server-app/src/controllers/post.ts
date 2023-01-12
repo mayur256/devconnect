@@ -144,6 +144,44 @@ class PostController {
         // send the response after all the processing is done
         res.status(httpStatus).json(response);
     }
+
+    /**
+     * @param {Request} req
+     * @param {Response} res
+     * @desc - based on presence of posId it return a post or array of post
+     */
+    public deletePost = async (req: Request, res: Response): Promise<void> => {
+        // Reponse Object
+        const response: { status: string, data: any } = {
+            status: STATUS.SUCCESS,
+            data: null
+        };
+        let httpStatus = STATUS_CODE.OK;
+
+        try {
+            const { postId = '' } = req.params
+
+            if (postId && Types.ObjectId.isValid(postId) && this.postService.postExists(postId)) {
+                // delete a post by its id and all the associated attachments
+                await this.postService.deletePostById(postId);
+
+                response.data = 'Post deleted successfully!';
+            } else {
+                // error post with given id does not exists
+                response.status = STATUS.ERROR;
+                response.data = 'Post not found!';
+                httpStatus = STATUS_CODE.CLIENT_ERROR;
+            }
+        } catch (e) {
+            response.status = STATUS.ERROR;
+            response.data = null;
+            httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
+            console.log(`Error in Post->getPosts method :: ${e}`);
+        }
+
+        // send the response after all the processing is done
+        res.status(httpStatus).json(response);
+    }
 };
 
 export default new PostController(postServ);
