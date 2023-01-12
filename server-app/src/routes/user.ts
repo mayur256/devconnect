@@ -17,5 +17,5 @@ export default function (router: Router) {
 
     // protected routes
     router.post('/user/profile/general', verifyToken, generalProfileSchema, userController.updateProfileGeneral);
-    router.post('/user/delete', verifyToken, userController.deleteUser);
+    router.delete('/user/delete', verifyToken, userController.deleteUser);
 };
