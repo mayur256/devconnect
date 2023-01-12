@@ -1,6 +1,9 @@
 // Express lib
 import { Response, Request } from 'express';
 
+// Mongoose
+import { Types } from 'mongoose';
+
 // express-validator lib
 import { validationResult } from 'express-validator';
 
@@ -168,6 +171,40 @@ class UserController {
             } else {
                 response.status = STATUS.ERROR;
                 response.data = errorTranformation(validationError.array());
+                httpStatus = STATUS_CODE.CLIENT_ERROR;
+            }
+        } catch (e) {
+            response.status = STATUS.ERROR;
+            response.data = null;
+            httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
+            console.log(`Error in User controller :: ${e}`);
+        }
+
+        // send the response after all the processing is done
+        res.status(httpStatus).json(response);
+    }
+
+    /**
+    * @param {Request} req
+    * @param {Response} res
+    * @desc - deletes an user
+    */
+    public deleteUser = async (req: Request, res: Response): Promise<void> => {
+        // Reponse Object
+        const response: { status: string, data: any } = {
+            status: STATUS.SUCCESS,
+            data: 'User deleted successfully!'
+        };
+        let httpStatus = STATUS_CODE.OK;
+
+        try {
+            const { decoded } = req.body;
+            const userId = decoded?._id;
+            if (Types.ObjectId.isValid(userId)) {
+                await this.userService.deleteUserById(userId);
+            } else {
+                response.status = STATUS.ERROR;
+                response.data = 'User not found!';
                 httpStatus = STATUS_CODE.CLIENT_ERROR;
             }
         } catch (e) {

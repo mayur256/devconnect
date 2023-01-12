@@ -20,4 +20,12 @@ export default function (router: Router) {
         createPostSchema,
         postController.createPost
     );
+    router.put(
+        '/post/:postId',
+        fileUpload.array('attachments', 10),
+        verifyToken,
+        createPostSchema,
+        postController.updatePost
+    );
+    router.get('/post/:postId?', postController.getPosts)
 };

@@ -157,6 +157,10 @@ class UserService {
         const profile = new Profile(generalProfile)
         await profile.save();
     }
+
+    deleteUserById = async (userId: string): Promise<any> => {
+        return await User.deleteOne({ _id: userId });
+    }
 };
 
 export default new UserService();

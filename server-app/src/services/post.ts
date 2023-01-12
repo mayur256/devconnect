@@ -21,6 +21,43 @@ class PostService {
         await post.save();
         return post;
     }
+
+    /**
+     * @param {string} postId
+     * @returns {Promise<any>}
+     * @desc - Gets a post by its Id
+     */
+    getPostById = async (postId: string): Promise<any> => {
+        return await Post.findOne({ _id: postId });
+    }
+
+    /**
+     * @param {string} postId
+     * @returns {Promise<boolean>}
+     * @desc - check whether the system has post with given post id
+     */
+    postExists = async (postId: string): Promise<boolean> => {
+        let result = false;
+        const posts = await Post.find({ _id: postId });
+        result = posts.length > 0;
+        return result;
+    }
+
+    /**
+     * @param {string} postId
+     * @param {IPost} postFieldsPayload
+     * @desc - updates a post with given id and payload
+     */
+    updatePost = async (postId: string, postFieldsPayload: IPost): Promise<any> => {
+        let post = null;
+        await Post.findOneAndUpdate({ _id: postId }, postFieldsPayload)
+        post = this.getPostById(postId)
+        return post;
+    }
+
+    getAllPosts = async (): Promise<Array<IPost>> => {
+        return await Post.find();
+    }
 };
 
 export default new PostService();
