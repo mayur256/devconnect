@@ -1,2 +1,3 @@
 server-app/node_modules
 server-app/.env
+server-app/public
