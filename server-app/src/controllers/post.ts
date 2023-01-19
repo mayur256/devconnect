@@ -43,6 +43,9 @@ class PostController {
                 const attachments = (req.files as Array<Express.Multer.File>)?.map((file: Express.Multer.File): any => {
                     return file.filename;
                 });
+
+                if (!req.body.visibility) req.body.visibility = 'public';
+
                 const { decoded, ...rest } = req.body;
                 response.data = await this.postService.createPost({ user: decoded._id, attachments, ...rest });
             } else {

@@ -16,8 +16,13 @@ try {
 // define a path to hold files via diskStorage engine
 const storage = multer.diskStorage({
     destination: function(req: Request, file: Express.Multer.File, cb: any) {
-        console.log('here>');
-        const destinationPath = path.join(__dirname, '../../public/uploads');
+        const { visibility = 'public' } = req.body;
+
+        const storageDirs = visibility === 'private' ? 'storage' : 'public';
+
+        const destinationPath = path.join(__dirname, '../../' + storageDirs + '/uploads');
+
+        // create the directory if it doesn't already exists
         if (!fs.existsSync(destinationPath)) {
             fs.mkdirSync(destinationPath, { recursive: true });
         }
