@@ -35,12 +35,12 @@ class PostController {
         };
         let httpStatus = STATUS_CODE.OK;
         try {
+            const { attachmentValidationError = null } = req.body;
             // validate the request body and evaluate the result
             const validationError = validationResult(req);
             // proceed if there are no validation errors
-            if (validationError.isEmpty()) {
+            if (!attachmentValidationError && validationError.isEmpty()) {
                 // attachments for the post
-                console.log({ files: req.files })
                 const attachments = (req.files as Array<Express.Multer.File>)?.map((file: Express.Multer.File): any => {
                     return file.filename;
                 });
@@ -49,6 +49,10 @@ class PostController {
 
                 const { decoded, ...rest } = req.body;
                 response.data = await this.postService.createPost({ user: decoded._id, attachments, ...rest });
+            } else if (attachmentValidationError) {
+                response.status = STATUS.ERROR;
+                response.data = attachmentValidationError;
+                httpStatus = STATUS_CODE.CLIENT_ERROR;
             } else {
                 response.status = STATUS.ERROR;
                 response.data = errorTranformation(validationError.array());

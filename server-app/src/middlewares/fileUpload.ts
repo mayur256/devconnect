@@ -38,6 +38,8 @@ const storage = multer.diskStorage({
 function fileFilter(req: Request, file: Express.Multer.File, cb: any): any {
     if (!file.mimetype.includes('image')) {
         cb(null, false);
+        req.body.attachmentValidationError = 'Only image files are allowed';
+        return;
     }
     cb(null, true);
 }
