@@ -40,6 +40,7 @@ class PostController {
             // proceed if there are no validation errors
             if (validationError.isEmpty()) {
                 // attachments for the post
+                console.log({ files: req.files })
                 const attachments = (req.files as Array<Express.Multer.File>)?.map((file: Express.Multer.File): any => {
                     return file.filename;
                 });

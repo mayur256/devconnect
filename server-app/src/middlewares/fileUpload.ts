@@ -35,4 +35,14 @@ const storage = multer.diskStorage({
     }
 });
 
-export const fileUpload = multer({ storage });
+function fileFilter(req: Request, file: Express.Multer.File, cb: any): any {
+    if (!file.mimetype.includes('image')) {
+        cb(null, false);
+    }
+    cb(null, true);
+}
+
+export const fileUpload = multer({
+    storage,
+    fileFilter
+});
