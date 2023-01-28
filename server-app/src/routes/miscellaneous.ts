@@ -5,5 +5,5 @@ import type { Router } from 'express';
 import userController from '../controllers/user';
 
 export default function (router: Router) {
-    router.get('/verify-account', userController.verifyAccount)
+    router.get('/verify-account', userController.verifyAccount);
 };

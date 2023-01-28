@@ -184,7 +184,7 @@ class PostController {
             response.status = STATUS.ERROR;
             response.data = null;
             httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
-            console.log(`Error in Post->getPosts method :: ${e}`);
+            console.log(`Error in Post->deletePost method :: ${e}`);
         }
 
         // send the response after all the processing is done
