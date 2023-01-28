@@ -22,11 +22,15 @@ export default function (router: Router) {
     );
     router.put(
         '/post/:postId',
-        fileUpload.array('attachments', 10),
         verifyToken,
         createPostSchema,
         postController.updatePost
     );
     router.get('/post/:postId?', postController.getPosts);
     router.delete('/post/:postId', verifyToken, postController.deletePost);
+
+    // handles attachments of posts
+    router.route('/post/:postId/attachment/:attachId?')
+        .post(fileUpload.array('attachments', 10), verifyToken, postController.addAttachments)
+        .delete(verifyToken, postController.removeAttachment);
 };

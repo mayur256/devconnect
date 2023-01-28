@@ -1,5 +1,7 @@
 // top level imports
-import fs from 'node:fs'
+import fs from 'node:fs';
+import path from 'node:path';
+import type { Express } from 'express';
 
 // Models
 import Post from '../models/Post';
@@ -65,6 +67,10 @@ class PostService {
         return await Post.find();
     }
 
+    /**
+     * @param {string} postId
+     * @description - deletes a post by its Id
+     */
     deletePostById = async (postId: string): Promise<void> => {
         const postToBeDeleted = await this.getPostById(postId);
         // delete all attachments for the post
@@ -73,6 +79,39 @@ class PostService {
         }
 
         await Post.findOneAndDelete({ _id: postId });
+    }
+
+    /**
+     * @param {Array<Express.Multer.File>} newAttachments
+     * @param {string} postId
+     * @description - adds attachments to an existing post
+     */
+    addAttachments = async (newAttachments: Array<Express.Multer.File>, postId: string): Promise<void> => {
+        const post = await this.getPostById(postId);
+        post.attachments = [
+            ...post.attachments,
+            ...newAttachments
+        ];
+
+        await post.save();
+    }
+
+    /**
+     * @param {string} postId
+     * @param {string} attachmentId
+     * @description - removes attachment of a post with postId
+     */
+    removeAttachment = async (postId: string, attachmentId: string): Promise<void> => {
+        const post = await this.getPostById(postId);
+        post.attachments = post.attachments.filter((fileId: string): boolean => fileId !== attachmentId);
+
+        if (post.visibility === 'private') {
+            fs.unlinkSync(path.resolve(__dirname, `../../storage/uploads/${attachmentId}`));
+        } else {
+            fs.unlinkSync(path.resolve(__dirname, `../../public/uploads/${attachmentId}`));
+        }
+        // remove attachment files for post from server storage
+        await post.save();
     }
 };
 
