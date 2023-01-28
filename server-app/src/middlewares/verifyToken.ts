@@ -1,42 +1,33 @@
-// JWT lib
-import * as jwt from 'jsonwebtoken';
 // Express lib
 import { NextFunction, Request, Response } from 'express';
 // Utils
-import { FRONT_URL, SECRET, STATUS } from '../utils/constant';
+import { STATUS } from '../utils/constant';
+import { getAuthCookie, getInfoFromJWT } from '../utils/Common';
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction): any => {
-    const authHeader = req.cookies.authorization;
-    let result: any = null;
+    const authCookie = getAuthCookie(req);
+    const result = {
+        status: STATUS.ERROR,
+        data: 'Authentication Failed'
+    };
 
-    if (authHeader) {
-        const token = authHeader;
-        const options = {
-            expiresIn: '364d',
-            issuer: FRONT_URL
-        };
-
+    if (authCookie) {
         try {
-            // verify makes sure that the token hasn't expired and has been issued by us
-            // and is infact correct
-            result = jwt.verify(token, SECRET, options);
+            // get decoded info from cookie
+            const decoded = getInfoFromJWT(authCookie);
+            if (decoded?._id) {
+                req.body.decoded = decoded;
 
-            // Let's pass back the decoded token to the request object
-            req.body.decoded = result;
-
-            // We call next to pass execution to the subsequent middleware
-            next();
-        } catch (err) {
-            result = {
-                status: STATUS.ERROR,
-                data: 'Authentication Failed'
+                // We call next to pass execution to the subsequent middleware
+                next();
+                return;
             }
-            res.status(401).send(result);
+        } catch {
+            // do nothing
         }
     } else {
-        res.json({
-            status: 401,
-            error: 'Authentication token is missing'
-        });
+        result.data = 'Authentication token is missing';
     }
+
+    res.status(401).send(result);
 };

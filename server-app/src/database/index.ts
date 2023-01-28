@@ -16,7 +16,7 @@ const connect = () => {
         .then(() => {
             console.log('✅ ✅ ✅ --- Mongo DB connected --- ✅ ✅ ✅');
         })
-        .catch(err => console.log(`Error while connecting to database :: ${err}`));
+        .catch((err: any) => console.log(`Error while connecting to database :: ${err}`));
 };
 
 const disconnect = () => {

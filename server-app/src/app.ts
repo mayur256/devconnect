@@ -1,4 +1,5 @@
 // common package imports
+import path from 'node:path';
 import express, { Application, Router } from 'express';
 import { createServer, Server } from 'http';
 import swaggerUi from 'swagger-ui-express';
@@ -18,11 +19,11 @@ import dbHandler from './database';
 
 // Application class
 class App {
-    private express: Application;
+    private expressApp: Application;
     private httpServer: Server | undefined;
 
     constructor() {
-        this.express = express();
+        this.expressApp = express();
         // init HTTP server with app
         this.initHttpServer();
         this.parseRequestBody();
@@ -35,10 +36,11 @@ class App {
         // connect with database
         this.dbConnect();
         this.initSwagger();
+        this.servePublicAssets();
     }
 
     initHttpServer(): void {
-        this.httpServer = createServer(this.express);
+        this.httpServer = createServer(this.expressApp);
     }
 
     getHttpServer(): Server | undefined {
@@ -49,13 +51,13 @@ class App {
         const router = Router();
         assembleRoutes(router);
         miscellaneousRoutes(router);
-        this.express.use('/', router); // common public routes
-        this.express.use('/api/v1', router); // api routes
+        this.expressApp.use('/', router); // common public routes
+        this.expressApp.use('/api/v1', router); // api routes
     }
 
     parseRequestBody(): void {
-        this.express.use(express.urlencoded({ extended: true }));
-        this.express.use(express.json());
+        this.expressApp.use(express.urlencoded({ extended: true }));
+        this.expressApp.use(express.json());
     }
 
     dbConnect(): void {
@@ -77,7 +79,7 @@ class App {
     } */
 
     initSwagger(): void {
-        this.express.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+        this.expressApp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
     }
 
     enableCors() {
@@ -85,12 +87,17 @@ class App {
             origin: 'http://localhost:4001',
         };
 
-        this.express.use(cors(corsOptions));
+        this.expressApp.use(cors(corsOptions));
     }
 
     // use cookie parser middleware for express
     parseCookies = (): void => {
-        this.express.use(cookieParser());
+        this.expressApp.use(cookieParser());
+    }
+
+    // server static assets
+    servePublicAssets(): void {
+        this.expressApp.use(express.static(path.resolve(__dirname, '../public')));
     }
 }
 

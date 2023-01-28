@@ -35,16 +35,24 @@ class PostController {
         };
         let httpStatus = STATUS_CODE.OK;
         try {
+            const { attachmentValidationError = null } = req.body;
             // validate the request body and evaluate the result
             const validationError = validationResult(req);
             // proceed if there are no validation errors
-            if (validationError.isEmpty()) {
+            if (!attachmentValidationError && validationError.isEmpty()) {
                 // attachments for the post
                 const attachments = (req.files as Array<Express.Multer.File>)?.map((file: Express.Multer.File): any => {
                     return file.filename;
                 });
+
+                if (!req.body.visibility) req.body.visibility = 'public';
+
                 const { decoded, ...rest } = req.body;
                 response.data = await this.postService.createPost({ user: decoded._id, attachments, ...rest });
+            } else if (attachmentValidationError) {
+                response.status = STATUS.ERROR;
+                response.data = attachmentValidationError;
+                httpStatus = STATUS_CODE.CLIENT_ERROR;
             } else {
                 response.status = STATUS.ERROR;
                 response.data = errorTranformation(validationError.array());
@@ -176,7 +184,7 @@ class PostController {
             response.status = STATUS.ERROR;
             response.data = null;
             httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
-            console.log(`Error in Post->getPosts method :: ${e}`);
+            console.log(`Error in Post->deletePost method :: ${e}`);
         }
 
         // send the response after all the processing is done
