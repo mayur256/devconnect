@@ -89,14 +89,9 @@ class PostController {
             // proceed if there are no validation errors
             if (validationError.isEmpty()) {
                 // Check whether post with given id exists or not
-                if (postId && Types.ObjectId.isValid(postId) && this.postService.postExists(postId)) {
-                    // attachments for the post
-                    const attachments = (req.files as Array<Express.Multer.File>)?.map((file: Express.Multer.File): any => {
-                        return file.filename;
-                    });
-
+                if (postId && Types.ObjectId.isValid(postId) && await this.postService.postExists(postId)) {
                     const { decoded, ...rest } = req.body;
-                    response.data = await this.postService.updatePost(postId, { user: decoded._id, attachments, ...rest });
+                    response.data = await this.postService.updatePost(postId, { user: decoded._id, ...rest });
                 } else {
                     // error post with given id does not exists
                     response.status = STATUS.ERROR;
@@ -185,6 +180,84 @@ class PostController {
             response.data = null;
             httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
             console.log(`Error in Post->deletePost method :: ${e}`);
+        }
+
+        // send the response after all the processing is done
+        res.status(httpStatus).json(response);
+    }
+
+    /**
+    * @param {Request} req
+    * @param {Response} res
+    * @desc - adds attachments to an existing post
+    */
+    public addAttachments = async (req: Request, res: Response): Promise<void> => {
+        // Reponse Object
+        const response: { status: string, data: any } = {
+            status: STATUS.SUCCESS,
+            data: null
+        };
+        let httpStatus = STATUS_CODE.OK;
+
+        try {
+            const { postId = '' } = req.params;
+
+            if (postId && Types.ObjectId.isValid(postId) && this.postService.postExists(postId)) {
+                // attachments for the post
+                const newAttachments = (req.files as Array<Express.Multer.File>)?.map((file: Express.Multer.File): any => {
+                    return file.filename;
+                });
+
+                await this.postService.addAttachments(newAttachments, postId);
+
+                response.data = 'Attachment added successfully!';
+            } else {
+                // error post with given id does not exists
+                response.status = STATUS.ERROR;
+                response.data = 'Post not found!';
+                httpStatus = STATUS_CODE.CLIENT_ERROR;
+            }
+        } catch (e) {
+            response.status = STATUS.ERROR;
+            response.data = null;
+            httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
+            console.log(`Error in Post->addAttachments method :: ${e}`);
+        }
+
+        // send the response after all the processing is done
+        res.status(httpStatus).json(response);
+    }
+
+    /**
+    * @param {Request} req
+    * @param {Response} res
+    * @desc - adds attachments to an existing post
+    */
+    public removeAttachment = async (req: Request, res: Response): Promise<void> => {
+        // Reponse Object
+        const response: { status: string, data: any } = {
+            status: STATUS.SUCCESS,
+            data: null
+        };
+        let httpStatus = STATUS_CODE.OK;
+
+        try {
+            const { postId = '', attachId = '' } = req.params;
+
+            if (postId && Types.ObjectId.isValid(postId) && this.postService.postExists(postId)) {
+                await this.postService.removeAttachment(postId, attachId);
+                response.data = 'Attachment removed successfully!';
+            } else {
+                // error post with given id does not exists
+                response.status = STATUS.ERROR;
+                response.data = 'Post not found!';
+                httpStatus = STATUS_CODE.CLIENT_ERROR;
+            }
+        } catch (e) {
+            response.status = STATUS.ERROR;
+            response.data = null;
+            httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
+            console.log(`Error in Post->removeAttachment method :: ${e}`);
         }
 
         // send the response after all the processing is done
