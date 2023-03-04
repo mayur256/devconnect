@@ -4,6 +4,7 @@ import type { Router } from 'express';
 // Middlewares
 import { verifyToken } from '../middlewares/verifyToken';
 import { fileUpload } from '../middlewares/fileUpload';
+import { checkProfile } from '../middlewares/checkProfile';
 
 // Controllers
 import postController from '../controllers/post';
@@ -17,20 +18,22 @@ export default function (router: Router) {
         '/post',
         fileUpload.array('attachments', 10),
         verifyToken,
+        checkProfile,
         createPostSchema,
         postController.createPost
     );
     router.put(
         '/post/:postId',
         verifyToken,
+        checkProfile,
         createPostSchema,
         postController.updatePost
     );
     router.get('/post/:postId?', postController.getPosts);
-    router.delete('/post/:postId', verifyToken, postController.deletePost);
+    router.delete('/post/:postId', verifyToken, checkProfile, postController.deletePost);
 
     // handles attachments of posts
     router.route('/post/:postId/attachment/:attachId?')
-        .post(fileUpload.array('attachments', 10), verifyToken, postController.addAttachments)
-        .delete(verifyToken, postController.removeAttachment);
+        .post(fileUpload.array('attachments', 10), verifyToken, checkProfile, postController.addAttachments)
+        .delete(verifyToken, checkProfile, postController.removeAttachment);
 };
