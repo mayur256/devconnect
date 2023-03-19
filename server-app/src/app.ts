@@ -28,9 +28,9 @@ class App {
         this.initHttpServer();
         this.parseRequestBody();
         this.parseCookies();
+        this.enableCors();
         // enable routing
         this.mountRoutes();
-        this.enableCors();
         // attach global request error handler
         // this.setGlobalValidationErrorHandler();
         // connect with database
@@ -84,7 +84,7 @@ class App {
 
     enableCors() {
         const corsOptions = {
-            origin: 'http://localhost:4001',
+            origin: '*',
         };
 
         this.expressApp.use(cors(corsOptions));
