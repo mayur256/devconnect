@@ -84,7 +84,9 @@ class App {
 
     enableCors() {
         const corsOptions = {
-            origin: '*',
+            origin: ['http://localhost:3000'],
+            methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
+            credentials: true
         };
 
         this.expressApp.use(cors(corsOptions));
