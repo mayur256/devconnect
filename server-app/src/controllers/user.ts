@@ -97,7 +97,7 @@ class UserController {
                     }
                     const tokenExpiryDuration = '364d';
                     const token = this.userService.generateToken(payload, tokenExpiryDuration);
-                    res.setHeader('set-cookie', `authorization=${token}`);
+                    res.setHeader('set-cookie', `authorization=${token}; HttpOnly; max-age=3600`);
                     response.data = loginUser;
                 } else {
                     response.status = STATUS.ERROR;
@@ -208,6 +208,73 @@ class UserController {
                 httpStatus = STATUS_CODE.CLIENT_ERROR;
             }
         } catch (e) {
+            response.status = STATUS.ERROR;
+            response.data = null;
+            httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
+            console.log(`Error in User controller :: ${e}`);
+        }
+
+        // send the response after all the processing is done
+        res.status(httpStatus).json(response);
+    }
+
+    /**
+    * @param {Request} req
+    * @param {Response} res
+    * @desc - logs out an user
+    */
+    public logoutUser = async (req: Request, res: Response): Promise<void> => {
+        // Reponse Object
+        const response: { status: string, data: any } = {
+            status: STATUS.SUCCESS,
+            data: 'User logged out successfully!'
+        };
+        let httpStatus = STATUS_CODE.OK;
+
+        try {
+            const { decoded } = req.body;
+            const userId = decoded?._id;
+
+            if (Types.ObjectId.isValid(userId) && this.userService.userExistsById(userId)) {
+                res.setHeader('set-cookie', `authorization=; expires=${new Date().toUTCString()}`);
+            } else {
+                response.status = STATUS.ERROR;
+                response.data = 'User not found!';
+                httpStatus = STATUS_CODE.CLIENT_ERROR;
+            }
+        } catch (e: any) {
+            response.status = STATUS.ERROR;
+            response.data = null;
+            httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;
+            console.log(`Error in User controller :: ${e}`);
+        }
+
+        // send the response after all the processing is done
+        res.status(httpStatus).json(response);
+    }
+
+    /**
+    * @param {Request} req
+    * @param {Response} res
+    * @desc - get user info based on auth token or passed user id
+    */
+    public getUserInfo = async (req: Request, res: Response): Promise<void> => {
+        // Reponse Object
+        const response: { status: string, data: any } = {
+            status: STATUS.SUCCESS,
+            data: null
+        };
+        let httpStatus = STATUS_CODE.OK;
+
+        try {
+            const userId = req.query.userId as string;
+
+            if (Types.ObjectId.isValid(userId) && this.userService.userExistsById(userId)) {
+                const user = await this.userService.getUserById(userId);
+                const { password, token, __v, ...rest } = user.toObject();
+                response.data = rest;
+            }
+        } catch (e: any) {
             response.status = STATUS.ERROR;
             response.data = null;
             httpStatus = STATUS_CODE.INTERNAL_SERVER_ERROR;

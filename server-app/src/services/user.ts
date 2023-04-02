@@ -19,6 +19,15 @@ import { IMailBody } from '../types/Common';
  */
 class UserService {
     /**
+     * @param {string} userId
+     * @returns {boolean}
+     * @desc returns a user by its mongoose id
+     */
+    getUserById = async (userId: string): Promise<any> => {
+        return await User.findOne({ _id: userId });
+    }
+
+    /**
      * @param {string} email
      * @returns {boolean}
      * @desc check whether a user with given email exists
@@ -91,7 +100,7 @@ class UserService {
     attemptLogin = async (email: string, password: string): Promise<any> => {
         const user = await User.findOne({ email }).lean();
         if (user && User.validatePassword(password, user?.password)) {
-            const { password, ...rest } = user;
+            const { password, token, ...rest } = user;
             return rest;
         }
         return user;
@@ -158,8 +167,25 @@ class UserService {
         await profile.save();
     }
 
+    /**
+     * @param {string} userId
+     * @returns {Promise<any>}
+     * @desc - deletes a user based on mongoose ObjectId
+     */
     deleteUserById = async (userId: string): Promise<any> => {
         return await User.deleteOne({ _id: userId });
+    }
+
+    /**
+     * @param {string} userId
+     * @returns {Promise<boolean>}
+     * @desc - checks whether user exists by id
+     */
+    userExistsById = async (userId: string): Promise<boolean> => {
+        let result = false;
+        const user = await this.getUserById(userId);
+        result = Boolean(user?._id);
+        return result;
     }
 };
 
