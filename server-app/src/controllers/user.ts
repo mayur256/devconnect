@@ -97,7 +97,7 @@ class UserController {
                     }
                     const tokenExpiryDuration = '364d';
                     const token = this.userService.generateToken(payload, tokenExpiryDuration);
-                    res.setHeader('set-cookie', `authorization=${token}; HttpOnly; max-age=3600`);
+                    res.setHeader('set-cookie', `authorization=${token}; HttpOnly; path=/`);
                     response.data = loginUser;
                 } else {
                     response.status = STATUS.ERROR;
@@ -236,7 +236,7 @@ class UserController {
             const userId = decoded?._id;
 
             if (Types.ObjectId.isValid(userId) && this.userService.userExistsById(userId)) {
-                res.setHeader('set-cookie', `authorization=; expires=${new Date().toUTCString()}`);
+                res.setHeader('set-cookie', `authorization=; max-age=0}`);
             } else {
                 response.status = STATUS.ERROR;
                 response.data = 'User not found!';
