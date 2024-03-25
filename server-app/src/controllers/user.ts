@@ -97,7 +97,8 @@ class UserController {
                     }
                     const tokenExpiryDuration = '364d';
                     const token = this.userService.generateToken(payload, tokenExpiryDuration);
-                    res.setHeader('set-cookie', `authorization=${token}; HttpOnly; path=/`);
+                    res.setHeader('set-cookie', `authorization=${token}; HttpOnly; path=/`); // instrument to share token with browsers
+                    res.setHeader('X-TOKEN', token); // instrument to share token with non-browser clients
                     response.data = loginUser;
                 } else {
                     response.status = STATUS.ERROR;
