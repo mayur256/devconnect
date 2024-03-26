@@ -54,7 +54,12 @@ class UserService {
         user = new User(userFields);
         await user.save();
 
-        await this.sendInvitationMail(userFields.email, userFields.name, user?._id?.toString());
+        if (process.env.MAIL_USER && process.env.MAIL_PASS) {
+            await this.sendInvitationMail(userFields.email, userFields.name, user?._id?.toString());
+        } else {
+            console.log("Mail credentials are not set. Mail functionality will not be available in the system.");
+        }
+
         user = user.toObject();
         delete user.password;
         return user;
@@ -110,7 +115,7 @@ class UserService {
      * @param { _id: string } payload
      * @returns - JWT signed token
      */
-    generateToken = (payload: {_id: string}, expiresIn: string) => {
+    generateToken = (payload: { _id: string }, expiresIn: string) => {
         const options = {
             expiresIn,
             issuer: FRONT_URL
@@ -122,7 +127,7 @@ class UserService {
      * @param {string} token
      * @returns - verifies a account based on token in the request
      */
-    verifyAccount = async(token: string): Promise<any> => {
+    verifyAccount = async (token: string): Promise<any> => {
         // check whether given token is for a user in our system
         try {
             const user = await User.findOne({ token });
