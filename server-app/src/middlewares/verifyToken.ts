@@ -5,16 +5,21 @@ import { STATUS } from '../utils/constant';
 import { getAuthCookie, getInfoFromJWT } from '../utils/Common';
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction): any => {
-    const authCookie = getAuthCookie(req);
+    let authToken = getAuthCookie(req);
+
+    if (!authToken) {
+        authToken = req.headers?.['X-TOKEN'] as string ?? null;
+    }
+
     const result = {
         status: STATUS.ERROR,
         data: 'Authentication Failed'
     };
 
-    if (authCookie) {
+    if (authToken) {
         try {
             // get decoded info from cookie
-            const decoded = getInfoFromJWT(authCookie);
+            const decoded = getInfoFromJWT(authToken);
             if (decoded?._id) {
                 req.body.decoded = decoded;
 
