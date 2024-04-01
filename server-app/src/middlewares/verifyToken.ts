@@ -6,9 +6,9 @@ import { getAuthCookie, getInfoFromJWT } from '../utils/Common';
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction): any => {
     let authToken = getAuthCookie(req);
-
+    console.log(authToken)
     if (!authToken) {
-        authToken = req.headers?.['X-TOKEN'] as string ?? null;
+        authToken = req.headers?.['x-token'] as string ?? null;
     }
 
     const result = {
